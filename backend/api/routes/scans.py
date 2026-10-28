@@ -33,34 +33,49 @@ from backend.api.routes.reports import get_reports_metadata
 router = APIRouter(prefix="/api/scans", tags=["scans"])
 
 
+EXTERNAL_TARGETS = os.path.abspath("tests/external_targets")
+
+
+def _resolve_external_target(path_lower: str):
+    """Map a known repo URL to its pinned local copy in tests/external_targets (if present)."""
+    for name in ("cpython", "openssl", "openssh"):
+        if name in path_lower:
+            candidate = os.path.join(EXTERNAL_TARGETS, name)
+            # Only accept a local target that is non-empty (ignoring .git folder).
+            # A timed-out clone leaves a directory containing only .git — never scan that.
+            if os.path.isdir(candidate) and any(f != ".git" for f in os.listdir(candidate)):
+                return os.path.abspath(candidate)
+    return None
+
+
 def _validate_scan_path(path: str) -> str:
     path = path.strip().strip('"').strip("'")
     if path.startswith("http://") or path.startswith("https://"):
-        path_lower = path.lower()
-        if "cpython" in path_lower:
-            target = os.path.abspath(os.path.join("tests", "external_targets", "cpython"))
-            if os.path.exists(target):
-                return target
-        elif "openssl" in path_lower:
-            target = os.path.abspath(os.path.join("tests", "external_targets", "openssl"))
-            if os.path.exists(target):
-                return target
-        elif "openssh" in path_lower:
-            target = os.path.abspath(os.path.join("tests", "external_targets", "openssh"))
-            if os.path.exists(target):
-                return target
-        
-        # Generic Git clone into external_targets directory
-        repo_name = path.rstrip("/").split("/")[-1].replace(".git", "")
-        dest = os.path.abspath(os.path.join("tests", "external_targets", repo_name))
-        if os.path.exists(dest):
-            return dest
-        import subprocess
-        try:
-            subprocess.run(["git", "clone", "--depth", "1", path, dest], check=True, timeout=60, capture_output=True)
-            return dest
-        except Exception as e:
-            raise HTTPException(status_code=400, detail=f"Failed to clone external repository {path}: {e}")
+        target = _resolve_external_target(path.lower())
+        if target:
+            return target
+        raise HTTPException(
+            status_code=400,
+            detail="No pinned local copy of this repository is available and outbound git clone is "
+                   "disabled in this air-gapped build. Use the Folder Picker or a local directory "
+                   "path instead, or pre-clone the repository into tests/external_targets/.",
+        )
+
+    if ".." in path:
+        raise HTTPException(status_code=400, detail="Path traversal tokens ('..') are prohibited.")
+    if os.name != "nt" and len(path) >= 2 and path[1] == ":" and path[0].isalpha():
+        raise HTTPException(
+            status_code=400,
+            detail=f"Windows host path '{path}' cannot be accessed directly inside this Linux/Docker container. Please click 'Browse & Select Folder' in the UI to choose the folder directly from your PC."
+        )
+    norm = os.path.abspath(os.path.normpath(path))
+    if not os.path.exists(norm):
+        raise HTTPException(status_code=404, detail=f"Target path does not exist on disk: {norm}")
+    drive, rest = os.path.splitdrive(norm)
+    rest_lower = rest.lower().replace("/", "\\")
+    if rest_lower in ("\\", "") or rest_lower.startswith(("\\windows", "\\system32", "\\program files", "\\program files (x86)", "\\etc", "\\root", "\\sys", "\\proc")):
+        raise HTTPException(status_code=400, detail="Scanning system root directories is prohibited for safety.")
+    return norm
 
     if ".." in path:
         raise HTTPException(status_code=400, detail="Path traversal tokens ('..') are prohibited.")
