@@ -50,3 +50,9 @@ scratch/
 # Presentations
 *.ppt
 *.pptx
+
+# Environment variables and secrets
+.env
+.env.local
+.env.*.local
+!.env.example

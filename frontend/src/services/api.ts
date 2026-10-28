@@ -61,8 +61,9 @@ export async function triggerScan(data: {
     body: JSON.stringify(data),
   });
   if (!res.ok) {
-    const detail = await res.json().catch(() => ({ detail: res.statusText }));
-    throw new Error(detail?.detail ?? `Scan API error: ${res.statusText}`);
+    const data = await res.json().catch(() => ({ detail: res.statusText }));
+    const msg = data?.detail?.message || (typeof data?.detail === "string" ? data.detail : data?.message) || `Scan API error: ${res.statusText}`;
+    throw new Error(msg);
   }
   return res.json();
 }

@@ -155,11 +155,14 @@ def _evidence(asset: CryptoAsset) -> dict:
 def _component(asset: CryptoAsset) -> dict:
     if asset.asset_type.value == "Library":
         # Standard library component (CycloneDX 1.6 has no library crypto assetType)
+        lib_name = asset.library or asset.algorithm
+        lib_ver = asset.library_version or "1.0"
+        ref = getattr(asset, "cbom_ref", None) or f"lib/{asset.algorithm.lower()}/{lib_name}"
         comp = {
             "type": "library",
-            "bom-ref": asset.cbom_ref or f"lib/{asset.algorithm.lower()}/{asset.library or 'unknown'}",
-            "name": asset.library or asset.algorithm,
-            "version": asset.library_version or "1.0",
+            "bom-ref": ref,
+            "name": lib_name,
+            "version": lib_ver,
         }
         if asset.recommendation:
             comp["properties"] = [
@@ -168,10 +171,13 @@ def _component(asset: CryptoAsset) -> dict:
             ]
         return comp
 
+    base_ref = getattr(asset, "cbom_ref", None) or f"crypto/{asset.asset_type.value.lower()}/{asset.algorithm.lower()}"
+    asset_ref = f"{base_ref}/{asset.asset_id}" if getattr(asset, "asset_id", None) else base_ref
+
     comp = {
         "type": "cryptographic-asset",
         "name": f"{asset.algorithm}{'-' + str(asset.key_size) if asset.key_size else ''}",
-        "bom-ref": asset.cbom_ref or f"crypto/{asset.asset_type.value.lower()}/{asset.algorithm.lower()}",
+        "bom-ref": asset_ref,
         "cryptoProperties": _crypto_properties(asset),
         "evidence": _evidence(asset),
         "properties": _qshield_props(asset),
@@ -184,7 +190,24 @@ def _component(asset: CryptoAsset) -> dict:
 
 
 def generate_cyclonedx_cbom(assets: List[CryptoAsset]) -> dict:
-    components = [_component(a) for a in assets]
+    components = []
+    seen_refs = set()
+    seen_libs = set()
+
+    for a in assets:
+        if a.asset_type.value == "Library":
+            lib_key = (a.library or a.algorithm, a.library_version or "1.0")
+            if lib_key in seen_libs:
+                continue
+            seen_libs.add(lib_key)
+        comp = _component(a)
+        ref = comp.get("bom-ref", "")
+        if ref in seen_refs:
+            ref = f"{ref}_{uuid.uuid4().hex[:6]}"
+            comp["bom-ref"] = ref
+        seen_refs.add(ref)
+        components.append(comp)
+
     cbom = {
         "bomFormat": "CycloneDX",
         "specVersion": "1.6",

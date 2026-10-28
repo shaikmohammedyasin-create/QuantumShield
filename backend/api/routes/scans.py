@@ -33,69 +33,26 @@ from backend.api.routes.reports import get_reports_metadata
 router = APIRouter(prefix="/api/scans", tags=["scans"])
 
 
-EXTERNAL_TARGETS = os.path.abspath("tests/external_targets")
-
-
-def _resolve_external_target(path_lower: str):
-    """Map a known repo URL to its pinned local copy in tests/external_targets (if present)."""
-    for name in ("cpython", "openssl", "openssh"):
-        if name in path_lower:
-            candidate = os.path.join(EXTERNAL_TARGETS, name)
-            # Only accept a local target that is non-empty (ignoring .git folder).
-            # A timed-out clone leaves a directory containing only .git — never scan that.
-            if os.path.isdir(candidate) and any(f != ".git" for f in os.listdir(candidate)):
-                return os.path.abspath(candidate)
-    return None
-
-
-def _validate_scan_path(path: str) -> str:
-    path = path.strip().strip('"').strip("'")
-    if path.startswith("http://") or path.startswith("https://"):
-        target = _resolve_external_target(path.lower())
-        if target:
-            return target
-        raise HTTPException(
-            status_code=400,
-            detail="No pinned local copy of this repository is available and outbound git clone is "
-                   "disabled in this air-gapped build. Use the Folder Picker or a local directory "
-                   "path instead, or pre-clone the repository into tests/external_targets/.",
-        )
-
-    if ".." in path:
-        raise HTTPException(status_code=400, detail="Path traversal tokens ('..') are prohibited.")
-    if os.name != "nt" and len(path) >= 2 and path[1] == ":" and path[0].isalpha():
-        raise HTTPException(
-            status_code=400,
-            detail=f"Windows host path '{path}' cannot be accessed directly inside this Linux/Docker container. Please click 'Browse & Select Folder' in the UI to choose the folder directly from your PC."
-        )
-    norm = os.path.abspath(os.path.normpath(path))
-    if not os.path.exists(norm):
-        raise HTTPException(status_code=404, detail=f"Target path does not exist on disk: {norm}")
-    drive, rest = os.path.splitdrive(norm)
-    rest_lower = rest.lower().replace("/", "\\")
-    if rest_lower in ("\\", "") or rest_lower.startswith(("\\windows", "\\system32", "\\program files", "\\program files (x86)", "\\etc", "\\root", "\\sys", "\\proc")):
-        raise HTTPException(status_code=400, detail="Scanning system root directories is prohibited for safety.")
-    return norm
-
+from backend.api.repository_acquisition import acquire_repository, validate_github_url, is_remote_scan_enabled
 
 
 @router.post("", response_model=ScanStatusResponse)
 async def trigger_scan(req: ScanRequest):
-    target = DEFAULT_CORPUS if req.use_corpus else _validate_scan_path(req.path)
-
-    res = await run_in_threadpool(
-        state.run_scan,
-        directory=target,
-        scenario_year=req.scenario_year,
-        x_lifetime=req.x_lifetime,
-        y_migration=req.y_migration
-    )
+    with acquire_repository(req.path, use_corpus=req.use_corpus, default_corpus_path=DEFAULT_CORPUS) as workspace:
+        await run_in_threadpool(
+            state.run_scan,
+            directory=workspace.scan_target,
+            scenario_year=req.scenario_year,
+            x_lifetime=req.x_lifetime,
+            y_migration=req.y_migration
+        )
+        display_name = workspace.display_name
 
     return ScanStatusResponse(
         scan_id=state.scan_id,
         scan_in_progress=False,
         current_stage="COMPLETE",
-        target_path=state.scan_path,
+        target_path=display_name,
         total_assets=len(state.assets),
         metrics=state.metrics
     )

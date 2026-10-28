@@ -30,10 +30,10 @@ const STAGES = [
 ];
 
 const QUICK_URLS = [
-  { label: "cpython (GitHub)", url: "https://github.com/python/cpython" },
+  { label: "QuantumShield (Demo)", url: "https://github.com/shaikmohammedyasin-create/QuantumShield" },
   { label: "openssl (GitHub)", url: "https://github.com/openssl/openssl" },
-  { label: "openssh (GitHub)", url: "https://github.com/openssh/openssh-portable" },
   { label: "curl (GitHub)", url: "https://github.com/curl/curl" },
+  { label: "cpython (GitHub)", url: "https://github.com/python/cpython" },
 ];
 
 const IGNORED_DIRS = new Set([
@@ -136,7 +136,7 @@ export const NewScanPage: React.FC = () => {
   const navigate = useNavigate();
   const [mode, setMode] = useState<InputMode>("path");
 
-  const [urlVal, setUrlVal] = useState("https://github.com/python/cpython");
+  const [urlVal, setUrlVal] = useState("https://github.com/shaikmohammedyasin-create/QuantumShield");
   const [pathVal, setPathVal] = useState("test_corpus");
 
   // Local folder selection
@@ -631,6 +631,22 @@ export const NewScanPage: React.FC = () => {
                 >
                   controlled test_corpus
                 </button>
+                <button
+                  type="button"
+                  id="preset-sih-btn"
+                  onClick={() => {
+                    setPathVal("sih");
+                    setSelectedFolderFiles(null);
+                    setSelectedFolderName(null);
+                  }}
+                  className={`px-2 py-0.5 rounded text-[10px] font-mono border transition-colors ${
+                    pathVal === "sih" && !selectedFolderFiles
+                      ? "bg-primary/20 text-primary border-primary font-bold"
+                      : "bg-surface-container border-outline-variant text-on-surface-variant hover:text-on-surface"
+                  }`}
+                >
+                  SIH26164 (Local Scan Root)
+                </button>
               </div>
             </div>
           </div>
@@ -776,7 +792,7 @@ export const NewScanPage: React.FC = () => {
                 </button>
               ))}
             </div>
-            <p className="text-[11px] font-mono text-outline">The repo will be shallow-cloned locally for air-gapped analysis. No data leaves the machine.</p>
+            <p className="text-[11px] font-mono text-outline">QuantumShield performs a controlled HTTPS archive acquisition into an isolated temporary workspace with Zip-Slip protection, runs AST analysis, and cleans up upon completion.</p>
           </div>
         )}
 

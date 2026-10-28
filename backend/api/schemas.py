@@ -267,3 +267,4 @@ class SettingsResponse(BaseModel):
     air_gap_enforced: bool = True
     zero_key_persistence: bool = True
     strict_sandbox: bool = True
+    remote_scan_enabled: bool = True

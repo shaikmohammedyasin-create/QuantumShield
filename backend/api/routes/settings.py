@@ -5,6 +5,7 @@ GET /api/settings - Returns workstation parameters, risk thresholds, and air-gap
 from fastapi import APIRouter
 from backend.api.schemas import SettingsResponse
 from backend.api.state import state
+from backend.api.repository_acquisition import is_remote_scan_enabled
 
 router = APIRouter(prefix="/api/settings", tags=["settings"])
 
@@ -41,5 +42,6 @@ def get_workstation_settings():
         deterministic_bom_ref=True,
         air_gap_enforced=True,
         zero_key_persistence=True,
-        strict_sandbox=True
+        strict_sandbox=True,
+        remote_scan_enabled=is_remote_scan_enabled()
     )
