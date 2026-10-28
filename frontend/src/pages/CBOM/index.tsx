@@ -277,7 +277,7 @@ export const CBOMPage: React.FC = () => {
                       </span>
                     </div>
                     <span className="text-[10px] text-outline font-mono">
-                      {comp["bom-ref"] || `ecdat-ref-${idx}`}
+                      {comp["bom-ref"] || `qs-ref-${idx}`}
                     </span>
                   </div>
 

@@ -1,7 +1,6 @@
-# ECDAT Deployment Guide (100% Production Ready)
+# QuantumShield Deployment Guide (100% Production Ready)
 
-**Enterprise Cryptographic Discovery & Analysis Tool (ECDAT)**  
-**Smart India Hackathon 2026 | PS ID: 26164 | NTRO**
+**Cryptographic Risk Intelligence & Post-Quantum Readiness Platform**
 
 ---
 
@@ -12,7 +11,7 @@
 | **Option 1 (Fastest & Free)** | **Frontend on Vercel** + **Backend on Render/Railway** | Cleanest split, global CDN frontend | ~5 minutes |
 | **Option 2 (Easiest All-in-One)** | **Render / Railway Web Service** (Unified) | Single URL, no CORS setup | ~3 minutes |
 | **Option 3 (Docker / VPS)** | **Any Docker host / AWS / DigitalOcean / EC2** | Air-gapped / Production / Government | ~2 minutes |
-| **Option 4 (Local Offline)** | **Local Machine** (`python run.py`) | Hackathon jury demo & air-gapped evaluation | Instant |
+| **Option 4 (Local Offline)** | **Local Machine** (`python run.py`) | Air-gapped evaluation | Instant |
 
 ---
 
@@ -28,8 +27,8 @@
    - **Start Command**: `uvicorn backend.api.main:app --host 0.0.0.0 --port $PORT`
    - **Plan**: `Free`
 5. Click **Deploy Web Service**.
-6. Copy your Render backend URL (e.g. `https://ecdat-backend.onrender.com`).
-   - You can test it by visiting: `https://ecdat-backend.onrender.com/health`
+6. Copy your Render backend URL (e.g. `https://quantumshield-backend.onrender.com`).
+   - You can test it by visiting: `https://quantumshield-backend.onrender.com/health`
 
 ### Step 2: Deploy Frontend on Vercel
 1. Go to [vercel.com](https://vercel.com/) and click **Add New...** -> **Project**.
@@ -39,9 +38,9 @@
    - **Framework Preset**: `Vite` (auto-detected)
    - **Environment Variables**:
      - Key: `VITE_API_BASE_URL`
-     - Value: `https://ecdat-backend.onrender.com/api` (use your actual Render backend URL)
+     - Value: `https://quantumshield-backend.onrender.com/api` (use your actual Render backend URL)
 4. Click **Deploy**.
-5. Your ECDAT UI is live with full SPA routing (`vercel.json` is pre-configured).
+5. Your QuantumShield UI is live with full SPA routing (`vercel.json` is pre-configured).
 
 ---
 
@@ -77,9 +76,9 @@ docker compose up -d --build
 
 ---
 
-## Option 4: Local Evaluation / Presentation (For SIH Jury)
+## Option 4: Local Evaluation / Presentation
 
-For the SIH Jury presentation (recommended for NTRO problem statement due to air-gap emphasis):
+For high-security or air-gapped environments:
 
 ```bash
 # 1. Install dependencies

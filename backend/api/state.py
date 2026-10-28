@@ -1,5 +1,5 @@
 """
-Global State Management for ECDAT Backend.
+Global State Management for QuantumShield Backend.
 Encapsulates active scan results, in-memory cache, telemetry logs, and Mosca settings.
 Air-gapped local execution only.
 """

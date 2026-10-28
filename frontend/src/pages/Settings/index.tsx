@@ -90,7 +90,7 @@ export const SettingsPage: React.FC = () => {
               { id: 4, name: "4. CycloneDX 1.6 CBOM Schema", icon: "schema" },
               { id: 5, name: "5. Air-Gapped Security & Privacy", icon: "lock" },
               { id: 6, name: "6. Interface & Diagnostics", icon: "terminal" },
-              { id: 7, name: "7. About Engine & NTRO Specs", icon: "info" },
+              { id: 7, name: "7. About Engine & Specs", icon: "info" },
             ].map((tab) => (
               <button
                 key={tab.id}
@@ -116,7 +116,7 @@ export const SettingsPage: React.FC = () => {
           <div className="hidden md:block border border-outline-variant bg-surface-container p-2.5 rounded mt-4">
             <div className="flex items-center gap-1.5 text-primary text-xs font-semibold mb-1">
               <span className="material-symbols-outlined text-[14px]">verified_user</span>
-              <span>NTRO OPERATIONAL SPEC</span>
+              <span>QuantumShield Operational Spec</span>
             </div>
             <p className="text-[10px] text-on-surface-variant leading-tight">
               All cryptographic discovery routines operate exclusively within local process memory. No outbound network transmission.
@@ -344,7 +344,7 @@ export const SettingsPage: React.FC = () => {
                     Zero Private Key Persistence
                   </div>
                   <p className="text-on-surface-variant text-[11px] leading-relaxed">
-                    ECDAT extracts algorithm names, parameters, and metadata only. Never writes, logs, or persists raw private keys or key material.
+                    QuantumShield extracts algorithm names, parameters, and metadata only. Never writes, logs, or persists raw private keys or key material.
                   </p>
                 </div>
 

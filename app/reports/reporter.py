@@ -1,5 +1,5 @@
 """
-Reporting Engine for ECDAT.
+Reporting Engine for QuantumShield.
 
 Generates dynamically from real scan results:
   - cbom.json        (CycloneDX 1.6 CBOM)
@@ -47,7 +47,7 @@ def export_inventory_csv(assets: List[CryptoAsset], filepath: str) -> str:
         for a in assets:
             writer.writerow({
                 "asset_id": a.asset_id,
-                "rule_id": a.rule_id or "ECDAT-GEN-001",
+                "rule_id": a.rule_id or "QS-GEN-001",
                 "algorithm": a.algorithm,
                 "primitive": a.primitive,
                 "key_size": a.key_size if a.key_size is not None else "",
@@ -84,7 +84,7 @@ def export_sarif(assets: List[CryptoAsset], metrics: Dict, filepath: str) -> str
     results = []
 
     for a in assets:
-        rule_id = a.rule_id or f"ECDAT-{a.algorithm}-001"
+        rule_id = a.rule_id or f"QS-{a.algorithm}-001"
         if rule_id not in rules:
             rules[rule_id] = {
                 "id": rule_id,
@@ -129,9 +129,9 @@ def export_sarif(assets: List[CryptoAsset], metrics: Dict, filepath: str) -> str
         "runs": [{
             "tool": {
                 "driver": {
-                    "name": "ECDAT",
+                    "name": "QuantumShield",
                     "version": "1.0.0",
-                    "informationUri": "https://sih.gov.in/sih2026PS",
+                    "informationUri": "https://github.com/shaikmohammedyasin-create/QuantumShield",
                     "rules": list(rules.values()),
                 }
             },
@@ -191,7 +191,7 @@ def export_html_report(assets: List[CryptoAsset], metrics: Dict, validation_resu
 
         rows_html.append(f"""
         <tr>
-            <td><code>{a.rule_id or 'ECDAT-GEN'}</code></td>
+            <td><code>{a.rule_id or 'QS-GEN'}</code></td>
             <td><strong>{a.algorithm}</strong> {f'({a.key_size}-bit)' if a.key_size else ''}</td>
             <td><span class="badge {q_class}">{a.quantum_vuln_class.value}</span></td>
             <td>{threat_tag or '<span class="text-muted">None</span>'}</td>
@@ -206,7 +206,7 @@ def export_html_report(assets: List[CryptoAsset], metrics: Dict, validation_resu
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ECDAT Cryptographic Security & Post-Quantum Risk Report</title>
+    <title>QuantumShield Cryptographic Security & Post-Quantum Risk Report</title>
     <style>
         :root {{
             --bg-main: #0B1120;
@@ -331,9 +331,9 @@ def export_html_report(assets: List[CryptoAsset], metrics: Dict, validation_resu
 </head>
 <body>
     <div class="header">
-        <h1>ECDAT Cryptographic Risk & Post-Quantum Analysis Report</h1>
+        <h1>QuantumShield Cryptographic Risk & Post-Quantum Analysis Report</h1>
         <div class="meta-bar">
-            Generated: <strong>{ts}</strong> | Tool: <strong>ECDAT v1.0 (SIH 2026 PS ID: 26164)</strong> | CycloneDX 1.6 CBOM: {cbom_badge}
+            Generated: <strong>{ts}</strong> | Tool: <strong>QuantumShield v1.0</strong> | CycloneDX 1.6 CBOM: {cbom_badge}
         </div>
     </div>
 
@@ -384,7 +384,7 @@ def export_html_report(assets: List[CryptoAsset], metrics: Dict, validation_resu
 
     <div class="section-title" style="margin-top: 40px;">Methodology & Verification Controls</div>
     <div class="card" style="font-size: 13px; color: var(--text-muted);">
-        <p><strong>Risk Engine Formulation:</strong> Explaining risk via NTRO formula: <code>100 × (0.35×QuantumExposure + 0.25×BusinessCriticality + 0.15×ExposureSurface + 0.15×DataSensitivity + 0.10×(1 - CryptoAgility))</code>.</p>
+        <p><strong>Risk Engine Formulation:</strong> QuantumShield deterministic risk model: <code>100 × (0.35×QuantumExposure + 0.25×BusinessCriticality + 0.15×ExposureSurface + 0.15×DataSensitivity + 0.10×(1 - CryptoAgility))</code>.</p>
         <p><strong>Mosca Condition:</strong> Evaluates <code>X (Data Lifetime) + Y (Migration Time) &gt; Z (CRQC Horizon)</code> where Z is an explicitly parameterized scenario horizon (default: 2035).</p>
         <p><strong>CBOM Specification:</strong> CycloneDX 1.6 Cryptographic Bill of Materials (CBOM) with strict schema validation against official specifications.</p>
     </div>
@@ -416,8 +416,8 @@ def export_pdf_report(assets: List[CryptoAsset], metrics: Dict, validation_resul
         rightMargin=14 * mm,
         topMargin=14 * mm,
         bottomMargin=14 * mm,
-        title="ECDAT Cryptographic Security Report",
-        author="ECDAT Core Team",
+        title="QuantumShield Cryptographic Security Report",
+        author="QuantumShield Core Team",
     )
 
     def _p(text: str, style=cell) -> Paragraph:
@@ -425,7 +425,7 @@ def export_pdf_report(assets: List[CryptoAsset], metrics: Dict, validation_resul
         return Paragraph(clean, style)
 
     story = [
-        _p("ECDAT — Cryptographic Discovery & Post-Quantum Analysis Report", title_style),
+        _p("QuantumShield — Cryptographic Discovery & Post-Quantum Analysis Report", title_style),
         _p(f"Scan Completed: {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S UTC')} | CycloneDX 1.6 CBOM: {'VALID (0 Errors)' if validation_result.get('valid') else 'INVALID'}", small),
         Spacer(1, 4 * mm),
         _p("Executive Summary & Risk Metrics", h2),
@@ -465,7 +465,7 @@ def export_pdf_report(assets: List[CryptoAsset], metrics: Dict, validation_resul
         risk_band = a.risk_band or "Unknown"
         loc_str = f"{os.path.basename(a.file_path or 'unknown')}:{a.line_number or 0}"
         algo_str = f"{a.algorithm or 'Unknown'} ({a.key_size or ''})".strip()
-        rule_str = a.rule_id or "ECDAT-GEN"
+        rule_str = a.rule_id or "QS-GEN"
         rec_str = (a.recommendation or "Maintain quantum-safe configuration")[:45]
         finding_rows.append([
             rule_str,
@@ -496,7 +496,7 @@ def export_summary_md(assets: List[CryptoAsset], metrics: Dict, validation_resul
     os.makedirs(os.path.dirname(filepath), exist_ok=True)
     ts = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
 
-    md = f"""# ECDAT Executive Scan Summary
+    md = f"""# QuantumShield Executive Scan Summary
 **Timestamp:** {ts}  
 **CycloneDX 1.6 CBOM Status:** {"VALID (0 Errors)" if validation_result.get("valid") else "FAILED"}  
 

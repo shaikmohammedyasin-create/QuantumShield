@@ -64,7 +64,7 @@ export const TerminalPage: React.FC = () => {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `ecdat-scan-log-${Date.now()}.log`;
+    a.download = `quantumshield-scan-log-${Date.now()}.log`;
     a.click();
     URL.revokeObjectURL(url);
   };
@@ -234,7 +234,7 @@ export const TerminalPage: React.FC = () => {
           {/* Console Stream Viewport */}
           <div className="flex-1 p-3 overflow-y-auto font-mono text-xs space-y-1 leading-relaxed selection:bg-primary selection:text-background">
             {loading ? (
-              <div className="text-outline py-4 text-center">Connecting to ECDAT daemon telemetry socket...</div>
+              <div className="text-outline py-4 text-center">Connecting to QuantumShield daemon telemetry socket...</div>
             ) : filteredLogs.length === 0 ? (
               <div className="text-outline py-4 text-center">No terminal logs matching current filters.</div>
             ) : (

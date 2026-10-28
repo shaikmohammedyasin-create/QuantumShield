@@ -1,5 +1,5 @@
 """
-Pydantic Schemas for ECDAT FastAPI API.
+Pydantic Schemas for QuantumShield FastAPI API.
 Matches TypeScript types in frontend.
 """
 from typing import List, Optional, Dict, Any
@@ -202,10 +202,37 @@ class MigrationSummary(BaseModel):
     compliant_algos: List[str]
 
 
+class MigrationTrackingItem(BaseModel):
+    id: int
+    rule_id: str
+    algorithm: str
+    primitive: str
+    file_name: str
+    file_path: str
+    line_number: int
+    risk_band: str
+    recommendation: str
+    status: str = "Not Started"
+
+class MigrationTrackingSummary(BaseModel):
+    total: int
+    migrated: int
+    verified: int
+    in_progress: int
+    planned: int
+    not_started: int
+    progress_percent: float
+
+class MigrationStatusUpdate(BaseModel):
+    key: str
+    status: str
+
 class MigrationResponse(BaseModel):
     matrix: List[MigrationItem]
     standards: Dict[str, str]
     summary: MigrationSummary
+    tracking: List[MigrationTrackingItem] = []
+    tracking_summary: Optional[MigrationTrackingSummary] = None
 
 
 class CBOMResponse(BaseModel):

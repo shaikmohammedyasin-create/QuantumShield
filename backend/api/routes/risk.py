@@ -27,7 +27,7 @@ def get_risk_analysis():
         threat_str = "HNDL" if a.hndl_risk else ("TNFL" if a.tnfl_risk else "None")
         top_items.append(InventoryItem(
             id=idx,
-            rule_id=a.rule_id or "ECDAT-SRC-001",
+            rule_id=a.rule_id or "QS-SRC-001",
             algorithm=a.algorithm,
             primitive=a.primitive,
             key_size=str(a.key_size) if a.key_size else "N/A",

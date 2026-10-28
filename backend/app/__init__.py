@@ -1,1 +1,1 @@
-"""ECDAT Backend - Enterprise Cryptographic Discovery & Analysis Tool"""
+"""QuantumShield Backend — Cryptographic Risk Intelligence & Post-Quantum Readiness Platform"""

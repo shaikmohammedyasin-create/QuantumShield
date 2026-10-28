@@ -1,5 +1,5 @@
 """
-ECDAT P0 acceptance test suite — mirrors source-of-truth §33 acceptance gates.
+QuantumShield (formerly ECDAT) P0 acceptance test suite — mirrors source-of-truth §33 acceptance gates.
 
 Run:  python -m pytest tests/ -q   (from project root, with venv active)
 """
@@ -281,7 +281,7 @@ def test_rule_ids_populated():
     assets, _ = run_full_scan(CORPUS)
     for a in assets:
         assert a.rule_id is not None and len(a.rule_id) > 0, f"Asset missing rule_id: {a.algorithm} in {a.file_path}"
-        assert any(a.rule_id.startswith(p) for p in ("ECDAT-SRC-", "ECDAT-CFG-", "ECDAT-CERT-", "ECDAT-DEP-", "ECDAT-BIN-")), \
+        assert any(a.rule_id.startswith(p) for p in ("QS-SRC-", "QS-CFG-", "QS-CERT-", "QS-DEP-", "QS-BIN-")), \
             f"Unexpected rule_id format: {a.rule_id}"
 
 
@@ -335,7 +335,7 @@ def test_ssh_public_key_scan(tmp_path):
         assets = scan_certificate_file(ssh_path)
         if assets:
             assert assets[0].algorithm in ("RSA", "Unknown")
-            assert assets[0].rule_id == "ECDAT-CERT-SSH-001"
+            assert assets[0].rule_id == "QS-CERT-SSH-001"
             assert assets[0].asset_type == AssetType.KEY
     except Exception:
         pass  # If OpenSSH parser encounters truncated key, graceful handling
@@ -351,7 +351,7 @@ def test_manifest_package_json(tmp_path):
     assert "RSA" in algos
     assert "AES" in algos
     for a in assets:
-        assert a.rule_id == "ECDAT-DEP-NPM-001"
+        assert a.rule_id == "QS-DEP-NPM-001"
 
 
 def test_manifest_pyproject_toml(tmp_path):
@@ -363,7 +363,7 @@ def test_manifest_pyproject_toml(tmp_path):
     algos = {a.algorithm for a in assets}
     assert "RSA" in algos or "AES" in algos
     for a in assets:
-        assert a.rule_id == "ECDAT-DEP-PY-001"
+        assert a.rule_id == "QS-DEP-PY-001"
 
 
 def test_binary_class_constant_pool(tmp_path):
@@ -383,7 +383,7 @@ def test_binary_class_constant_pool(tmp_path):
     assets = scan_class_bytes(class_bytes, "CryptoTest.class")
     assert len(assets) >= 1
     assert assets[0].algorithm == "AES"
-    assert assets[0].rule_id == "ECDAT-BIN-AES-001"
+    assert assets[0].rule_id == "QS-BIN-AES-001"
 
 
 def test_reporting_suite(tmp_path):

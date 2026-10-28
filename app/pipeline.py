@@ -1,5 +1,5 @@
 """
-End-to-end ECDAT scan pipeline - Performance Optimized.
+End-to-end QuantumShield scan pipeline - Performance Optimized.
 Single-pass walk, O(1) dedup, parallel analysis via ThreadPoolExecutor.
 """
 import os
@@ -62,7 +62,7 @@ def run_full_scan(
             log_callback(level, msg)
 
     t0 = time.time()
-    _log("INFO", f"ECDAT engine starting. Target: {directory}")
+    _log("INFO", f"QuantumShield engine starting. Target: {directory}")
     _log("INFO", f"Mosca: Z={scenario_year}, X={x_lifetime}y, Y={y_migration}y | Workers: {_WORKERS}")
 
     dep_fps = []

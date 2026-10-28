@@ -1,5 +1,5 @@
 """
-Test suite verifying all FastAPI backend endpoints for ECDAT Security Workstation.
+Test suite verifying all FastAPI backend endpoints for QuantumShield Security Workstation.
 """
 import sys
 import os
@@ -61,7 +61,7 @@ def test_finding_detail_endpoint():
     assert data["algorithm"]
     assert data["file_path"]
     assert data["line_number"] > 0
-    assert data["rule_id"].startswith("ECDAT-")
+    assert data["rule_id"].startswith("QS-")
 
 
 def test_mosca_endpoint():

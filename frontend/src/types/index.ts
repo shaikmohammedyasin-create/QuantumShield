@@ -176,10 +176,40 @@ export interface MigrationSummary {
   compliant_algos: string[];
 }
 
+export interface MigrationTrackingItem {
+  id: number;
+  rule_id: string;
+  algorithm: string;
+  primitive: string;
+  file_name: string;
+  file_path: string;
+  line_number: number;
+  risk_band: string;
+  recommendation: string;
+  status: string;
+}
+
+export interface MigrationTrackingSummary {
+  total: number;
+  migrated: number;
+  verified: number;
+  in_progress: number;
+  planned: number;
+  not_started: number;
+  progress_percent: number;
+}
+
 export interface MigrationResponse {
   matrix: MigrationItem[];
   standards: Record<string, string>;
   summary?: MigrationSummary;
+  tracking?: MigrationTrackingItem[];
+  tracking_summary?: MigrationTrackingSummary;
+}
+
+export interface MigrationStatusUpdate {
+  key: string;
+  status: string;
 }
 
 export interface CBOMData {

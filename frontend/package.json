@@ -1,7 +1,8 @@
 {
-  "name": "frontend",
+  "name": "quantumshield",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.1.0",
+  "description": "QuantumShield — Cryptographic Risk Intelligence & Post-Quantum Readiness Platform",
   "type": "module",
   "scripts": {
     "dev": "vite",

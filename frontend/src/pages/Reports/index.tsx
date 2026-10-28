@@ -63,7 +63,7 @@ export const ReportsPage: React.FC = () => {
               Reports & Evidence Deliverables
             </h1>
             <span className="px-2 py-0.5 rounded text-code-sm font-code-sm bg-surface-container-highest border border-outline-variant text-primary font-mono">
-              NTRO SEC-3 SPEC
+              SEC-3 SPEC
             </span>
           </div>
           <p className="text-body-sm font-body-sm text-on-surface-variant mt-0.5 text-xs">
@@ -121,7 +121,7 @@ export const ReportsPage: React.FC = () => {
           <label className="text-[10px] font-mono text-on-surface-variant uppercase mb-1">Classification Tier</label>
           <div className="flex items-center bg-surface-container-lowest border border-outline-variant px-2.5 py-1 rounded text-xs">
             <span className="material-symbols-outlined text-primary text-[14px] mr-1.5">lock</span>
-            <span className="font-mono text-primary font-bold">NTRO-RESTRICTED / SEC-3</span>
+            <span className="font-mono text-primary font-bold">SEC-3 / RESTRICTED</span>
           </div>
         </div>
 
@@ -189,7 +189,7 @@ export const ReportsPage: React.FC = () => {
                     {del.name}
                   </h3>
                   <p className="text-body-sm text-on-surface-variant mt-1 text-xs leading-relaxed">
-                    Formal audit artifact verified according to NTRO ECDAT specification. Contains cryptographic findings, confidence, and standards-aligned recommendations.
+                    Formal audit artifact verified according to the QuantumShield specification. Contains cryptographic findings, confidence, and standards-aligned recommendations.
                   </p>
                 </div>
 

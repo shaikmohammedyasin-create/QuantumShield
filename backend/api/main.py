@@ -1,6 +1,5 @@
 """
-ECDAT Security Workstation — FastAPI Backend Entry Point.
-SIH 2026 | PS ID 26164 | NTRO
+QuantumShield — FastAPI Backend Entry Point
 
 Architecture:
   React + TypeScript + Vite + Stitch UI  (Frontend)
@@ -10,7 +9,7 @@ Architecture:
                  FastAPI                (Backend API Layer)
                      │
                      ▼
-           Existing ECDAT Python Engine (Discovery, Normalization, Quantum, Mosca, Risk, PQC, CBOM)
+           QuantumShield Python Engine (Discovery, Normalization, Quantum, Mosca, Risk, PQC, CBOM)
 """
 import sys
 import os
@@ -38,8 +37,8 @@ from backend.api.routes import (
 )
 
 app = FastAPI(
-    title="ECDAT Security Workstation API",
-    description="Enterprise Cryptographic Discovery & Analysis Tool API — NTRO PS-ID 26164",
+    title="QuantumShield API",
+    description="QuantumShield — Cryptographic Risk Intelligence & Post-Quantum Readiness Platform API",
     version="1.0.0",
     docs_url="/docs",
     redoc_url="/redoc"
@@ -85,7 +84,7 @@ app.include_router(settings.router)
 def health_check():
     return {
         "status": "healthy",
-        "service": "ECDAT Security Workstation API",
+        "service": "QuantumShield API",
         "version": "1.0.0",
         "air_gap": "enforced"
     }
@@ -106,11 +105,11 @@ async def root_index():
 @app.get("/api", include_in_schema=False)
 def api_index():
     return {
-        "service": "ECDAT Security Workstation API",
+        "service": "QuantumShield API",
         "status": "online",
         "docs": "/docs",
         "health": "/health",
-        "message": "ECDAT API is running. Access /docs for interactive Swagger UI."
+        "message": "QuantumShield API is running. Access /docs for interactive Swagger UI."
     }
 if os.path.exists(dist_dir):
     assets_dir = os.path.join(dist_dir, "assets")

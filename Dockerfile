@@ -1,5 +1,5 @@
 # ==============================================================================
-# ECDAT — Enterprise Cryptographic Discovery & Analysis Tool (SIH 2026, PS 26164)
+# QuantumShield — Cryptographic Risk Intelligence & Post-Quantum Readiness Platform
 # Multi-stage production container for fullstack deployment
 # ==============================================================================
 

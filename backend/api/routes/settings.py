@@ -12,7 +12,7 @@ router = APIRouter(prefix="/api/settings", tags=["settings"])
 @router.get("", response_model=SettingsResponse)
 def get_workstation_settings():
     return SettingsResponse(
-        profile="AST-Crypt-Strict (NTRO-SEC)",
+        profile="QS-Crypt-Strict",
         target_path=state.scan_path,
         scenario_year=state.scenario_year,
         x_lifetime=state.x_lifetime,

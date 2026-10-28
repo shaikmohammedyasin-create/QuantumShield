@@ -220,14 +220,14 @@ def _create_dep_assets(
 def scan_dependency_file(filepath: str) -> List[CryptoAsset]:
     base = os.path.basename(filepath).lower()
     if base in ("requirements.txt", "requirements-dev.txt"):
-        return _create_dep_assets(_parse_requirements(filepath), filepath, "ECDAT-DEP-PY-001")
+        return _create_dep_assets(_parse_requirements(filepath), filepath, "QS-DEP-PY-001")
     elif base == "pom.xml":
-        return _create_dep_assets(_parse_pom(filepath), filepath, "ECDAT-DEP-JAVA-001")
+        return _create_dep_assets(_parse_pom(filepath), filepath, "QS-DEP-JAVA-001")
     elif base in ("package.json", "package-lock.json"):
-        return _create_dep_assets(_parse_json_deps(filepath), filepath, "ECDAT-DEP-NPM-001")
+        return _create_dep_assets(_parse_json_deps(filepath), filepath, "QS-DEP-NPM-001")
     elif base in ("pyproject.toml", "cargo.toml"):
-        rule = "ECDAT-DEP-PY-001" if "pyproject" in base else "ECDAT-DEP-RUST-001"
+        rule = "QS-DEP-PY-001" if "pyproject" in base else "QS-DEP-RUST-001"
         return _create_dep_assets(_parse_toml_deps(filepath), filepath, rule)
     elif base in ("go.mod", "go.sum"):
-        return _create_dep_assets(_parse_go_mod(filepath), filepath, "ECDAT-DEP-GO-001")
+        return _create_dep_assets(_parse_go_mod(filepath), filepath, "QS-DEP-GO-001")
     return []

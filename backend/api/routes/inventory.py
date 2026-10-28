@@ -49,7 +49,7 @@ def get_inventory(
 
         items.append(InventoryItem(
             id=idx,
-            rule_id=a.rule_id or "ECDAT-SRC-001",
+            rule_id=a.rule_id or "QS-SRC-001",
             algorithm=a.algorithm,
             primitive=a.primitive,
             key_size=str(a.key_size) if a.key_size else "N/A",

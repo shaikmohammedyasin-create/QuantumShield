@@ -43,7 +43,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen = false, onClose }) => 
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-1.5">
               <span className="material-symbols-outlined text-primary text-base">memory</span>
-              <span className="text-primary font-mono text-xs font-bold uppercase tracking-tight">ECDAT Engine</span>
+              <span className="text-primary font-mono text-xs font-bold uppercase tracking-tight">QuantumShield Engine</span>
             </div>
             <div className="flex items-center gap-2">
               <span className="px-1 py-0.2 bg-tertiary/10 text-tertiary border border-tertiary/30 font-mono text-[9px] rounded">
@@ -61,7 +61,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen = false, onClose }) => 
               )}
             </div>
           </div>
-          <p className="text-outline font-mono text-[10px] mt-0.5">SIH 2026 // NTRO SEC (PS 26164)</p>
+          <p className="text-outline font-mono text-[10px] mt-0.5">Post-Quantum Cryptographic Risk Intelligence</p>
         </div>
 
         {/* Primary AST Action */}
@@ -119,7 +119,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen = false, onClose }) => 
         </NavLink>
 
         <div className="px-3 py-1 bg-surface-container-high/40 rounded flex items-center justify-between text-[10px] font-mono text-outline mt-0.5">
-          <span>AIR-GAP ID: NTRO-8841</span>
+          <span>AIR-GAP ID: QS-8841</span>
           <span className="text-primary font-bold">SEC-3</span>
         </div>
       </div>

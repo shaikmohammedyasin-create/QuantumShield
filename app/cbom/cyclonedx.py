@@ -3,7 +3,7 @@ CycloneDX 1.6 CBOM generator and validator.
 
 Generates a valid CycloneDX 1.6 BOM where every crypto finding becomes a
 `cryptographic-asset` component with cryptoProperties, evidence occurrences and
-ECDAT-namespaced properties. Crypto libraries are exported as standard `library`
+QuantumShield-namespaced properties. Crypto libraries are exported as standard `library`
 components (CycloneDX 1.6 has no 'library' crypto assetType, so libraries stay
 regular components and reference their crypto via dependencies).
 
@@ -80,23 +80,23 @@ def _cx_asset_type(asset: CryptoAsset) -> str:
     return "algorithm" if t == "Algorithm" else t.lower()
 
 
-def _ecdat_props(asset: CryptoAsset) -> list:
+def _qshield_props(asset: CryptoAsset) -> list:
     props = [
-        {"name": "ecdat:quantum-status", "value": asset.quantum_status.value},
-        {"name": "ecdat:quantum-class", "value": asset.quantum_vuln_class.value},
-        {"name": "ecdat:risk-score", "value": str(asset.risk_score)},
-        {"name": "ecdat:risk-band", "value": asset.risk_band},
-        {"name": "ecdat:confidence", "value": asset.confidence},
+        {"name": "quantumshield:quantum-status", "value": asset.quantum_status.value},
+        {"name": "quantumshield:quantum-class", "value": asset.quantum_vuln_class.value},
+        {"name": "quantumshield:risk-score", "value": str(asset.risk_score)},
+        {"name": "quantumshield:risk-band", "value": asset.risk_band},
+        {"name": "quantumshield:confidence", "value": asset.confidence},
     ]
     if asset.mosca_margin is not None:
-        props.append({"name": "ecdat:mosca-margin-years", "value": str(round(asset.mosca_margin, 2))})
-        props.append({"name": "ecdat:mosca-at-risk", "value": str(asset.mosca_at_risk).lower()})
+        props.append({"name": "quantumshield:mosca-margin-years", "value": str(round(asset.mosca_margin, 2))})
+        props.append({"name": "quantumshield:mosca-at-risk", "value": str(asset.mosca_at_risk).lower()})
     if asset.recommendation:
-        props.append({"name": "ecdat:recommendation", "value": asset.recommendation})
+        props.append({"name": "quantumshield:recommendation", "value": asset.recommendation})
     if asset.why_risky:
-        props.append({"name": "ecdat:why", "value": asset.why_risky})
+        props.append({"name": "quantumshield:why", "value": asset.why_risky})
     if asset.migration_effort:
-        props.append({"name": "ecdat:effort", "value": asset.migration_effort})
+        props.append({"name": "quantumshield:effort", "value": asset.migration_effort})
     return props
 
 
@@ -163,8 +163,8 @@ def _component(asset: CryptoAsset) -> dict:
         }
         if asset.recommendation:
             comp["properties"] = [
-                {"name": "ecdat:quantum-status", "value": asset.quantum_status.value},
-                {"name": "ecdat:recommendation", "value": asset.recommendation},
+                {"name": "quantumshield:quantum-status", "value": asset.quantum_status.value},
+                {"name": "quantumshield:recommendation", "value": asset.recommendation},
             ]
         return comp
 
@@ -174,12 +174,12 @@ def _component(asset: CryptoAsset) -> dict:
         "bom-ref": asset.cbom_ref or f"crypto/{asset.asset_type.value.lower()}/{asset.algorithm.lower()}",
         "cryptoProperties": _crypto_properties(asset),
         "evidence": _evidence(asset),
-        "properties": _ecdat_props(asset),
+        "properties": _qshield_props(asset),
     }
     if asset.hndl_risk:
-        comp["properties"].append({"name": "ecdat:threat", "value": "HNDL"})
+        comp["properties"].append({"name": "quantumshield:threat", "value": "HNDL"})
     if asset.tnfl_risk:
-        comp["properties"].append({"name": "ecdat:threat", "value": "TNFL"})
+        comp["properties"].append({"name": "quantumshield:threat", "value": "TNFL"})
     return comp
 
 

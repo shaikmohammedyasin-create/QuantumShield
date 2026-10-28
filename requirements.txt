@@ -1,4 +1,4 @@
-# ECDAT — Enterprise Cryptographic Discovery & Analysis Tool (SIH 2026, PS 26164)
+# QuantumShield — Cryptographic Risk Intelligence & Post-Quantum Readiness Platform
 # Core runtime + analysis dependencies
 fastapi>=0.110.0
 uvicorn>=0.28.0

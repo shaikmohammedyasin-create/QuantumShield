@@ -2,8 +2,9 @@
   "framework": "vite",
   "rewrites": [
     {
+      "_comment": "Backend proxy for cryptographic risk intelligence API",
       "source": "/api/:match*",
-      "destination": "https://ecdat-sih2026.onrender.com/api/:match*"
+      "destination": "https://NEW-BACKEND-URL/api/:match*"
     },
     {
       "source": "/(.*)",

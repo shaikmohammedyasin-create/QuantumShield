@@ -1,15 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { fetchMigration } from "../../services/api";
-import type { MigrationResponse } from "../../types";
+import { fetchMigration, API_BASE } from "../../services/api";
+import type { MigrationResponse, MigrationTrackingItem, MigrationStatusUpdate } from "../../types";
 
 export const MigrationGuidance: React.FC = () => {
   const [data, setData] = useState<MigrationResponse | null>(null);
   const [loading, setLoading] = useState(true);
+  const [tracking, setTracking] = useState<MigrationTrackingItem[]>([]);
+  const [trackingSummary, setTrackingSummary] = useState<MigrationResponse["tracking_summary"]>(undefined);
 
   useEffect(() => {
     fetchMigration()
       .then((res) => {
         setData(res);
+        setTracking(res.tracking || []);
+        setTrackingSummary(res.tracking_summary);
         setLoading(false);
       })
       .catch((err) => {
@@ -27,6 +31,48 @@ export const MigrationGuidance: React.FC = () => {
     a.download = `pqc-migration-roadmap.json`;
     a.click();
     URL.revokeObjectURL(url);
+  };
+
+  const trackingKey = (t: MigrationTrackingItem) => `${t.rule_id}|${t.file_path}|${t.line_number}`;
+
+  const handleStatusChange = (item: MigrationTrackingItem, newStatus: string) => {
+    const key = trackingKey(item);
+    const payload: MigrationStatusUpdate = { key, status: newStatus };
+    // Optimistic local update
+    setTracking((prev) => prev.map((t) => (trackingKey(t) === key ? { ...t, status: newStatus } : t)));
+    setTrackingSummary((_prev) => {
+      const counts = { Migrated: 0, Verified: 0, "In Progress": 0, Planned: 0, "Not Started": 0 };
+      tracking.forEach((t) => {
+        const s = trackingKey(t) === key ? newStatus : t.status;
+        if (s in counts) counts[s as keyof typeof counts] += 1;
+      });
+      const total = tracking.length;
+      const progress = total > 0 ? Math.round(((counts.Migrated + counts.Verified) / total) * 1000) / 10 : 0;
+      return {
+        total,
+        migrated: counts.Migrated,
+        verified: counts.Verified,
+        in_progress: counts["In Progress"],
+        planned: counts.Planned,
+        not_started: counts["Not Started"],
+        progress_percent: progress,
+      };
+    });
+
+    fetch(`${API_BASE}/migration/status`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error(`Migration status update failed: ${res.statusText}`);
+        return res.json();
+      })
+      .catch((err) => {
+        console.error("Failed to save migration status:", err);
+        // Revert optimistic update on failure
+        setTracking((prev) => prev.map((t) => (trackingKey(t) === key ? { ...t, status: item.status } : t)));
+      });
   };
 
   if (loading) {
@@ -339,6 +385,116 @@ export const MigrationGuidance: React.FC = () => {
                 )}
               </div>
             ))}
+          </div>
+        )}
+      </section>
+
+      {/* Migration Progress Tracking */}
+      <section className="bg-surface-container-low border border-outline-variant rounded p-4 flex flex-col gap-3">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <span className="material-symbols-outlined text-primary text-[18px]">insights</span>
+            <h2 className="text-headline-md font-headline-md text-on-surface font-semibold text-sm">
+              Migration Progress Tracking
+            </h2>
+          </div>
+          <span className="text-code-sm text-outline text-xs">
+            {trackingSummary ? `${trackingSummary.migrated + trackingSummary.verified} / ${trackingSummary.total} migrated or verified` : ""}
+          </span>
+        </div>
+
+        {/* Overall progress bar */}
+        <div className="space-y-2">
+          <div className="flex items-center justify-between text-xs">
+            <span className="text-on-surface font-semibold">
+              Overall Progress: {trackingSummary?.progress_percent ?? 0}%
+            </span>
+            <span className="text-on-surface-variant">
+              (Migrated + Verified) / Total
+            </span>
+          </div>
+          <div className="h-2 bg-surface-container-highest rounded-full overflow-hidden">
+            <div
+              className="h-full bg-primary transition-all"
+              style={{ width: `${trackingSummary?.progress_percent ?? 0}%` }}
+            />
+          </div>
+
+          {/* Status badges */}
+          <div className="flex flex-wrap gap-2 pt-1">
+            <span className="px-2 py-0.5 rounded text-[10px] font-medium bg-surface-container-highest border border-outline-variant text-on-surface-variant">
+              Not Started: {trackingSummary?.not_started ?? 0}
+            </span>
+            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-500/10 border border-blue-500/30 text-blue-400">
+              Planned: {trackingSummary?.planned ?? 0}
+            </span>
+            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-yellow-500/10 border border-yellow-500/30 text-yellow-400">
+              In Progress: {trackingSummary?.in_progress ?? 0}
+            </span>
+            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-green-500/10 border border-green-500/30 text-green-400">
+              Migrated: {trackingSummary?.migrated ?? 0}
+            </span>
+            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-teal-500/10 border border-teal-500/30 text-teal-400">
+              Verified: {trackingSummary?.verified ?? 0}
+            </span>
+          </div>
+        </div>
+
+        {/* Tracking table */}
+        {tracking.length === 0 ? (
+          <div className="p-6 text-center text-xs text-on-surface-variant italic border border-outline-variant rounded bg-surface-container">
+            No candidate assets to track. Run a scan on vulnerable primitives first.
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-xs text-on-surface">
+              <thead>
+                <tr className="border-b border-outline-variant text-left text-on-surface-variant">
+                  <th className="py-2 px-2 font-semibold">Algorithm</th>
+                  <th className="py-2 px-2 font-semibold">Primitive</th>
+                  <th className="py-2 px-2 font-semibold">Location</th>
+                  <th className="py-2 px-2 font-semibold">Risk</th>
+                  <th className="py-2 px-2 font-semibold">Recommendation</th>
+                  <th className="py-2 px-2 font-semibold">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {tracking.map((t) => (
+                  <tr key={trackingKey(t)} className="border-b border-outline-variant/50 hover:bg-surface-container">
+                    <td className="py-2 px-2 font-mono text-error">{t.algorithm}</td>
+                    <td className="py-2 px-2 font-mono">{t.primitive}</td>
+                    <td className="py-2 px-2 font-mono text-on-surface-variant">{t.file_name}:{t.line_number}</td>
+                    <td className="py-2 px-2">
+                      <span
+                        className={`px-1.5 py-0.2 rounded text-[10px] font-bold ${
+                          t.risk_band?.toUpperCase() === "CRITICAL"
+                            ? "bg-error-container text-on-error-container"
+                            : "bg-primary-container/20 text-primary border border-primary/30"
+                        }`}
+                      >
+                        {t.risk_band}
+                      </span>
+                    </td>
+                    <td className="py-2 px-2 text-on-surface-variant max-w-[200px] truncate">
+                      {t.recommendation}
+                    </td>
+                    <td className="py-2 px-2">
+                      <select
+                        value={t.status}
+                        onChange={(e) => handleStatusChange(t, e.target.value)}
+                        className="bg-surface-container-highest border border-outline-variant rounded px-1.5 py-0.5 text-on-surface text-xs"
+                      >
+                        <option value="Not Started">Not Started</option>
+                        <option value="Planned">Planned</option>
+                        <option value="In Progress">In Progress</option>
+                        <option value="Migrated">Migrated</option>
+                        <option value="Verified">Verified</option>
+                      </select>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         )}
       </section>

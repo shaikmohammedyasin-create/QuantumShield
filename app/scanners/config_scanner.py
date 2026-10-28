@@ -43,7 +43,7 @@ AES_CIPHER = re.compile(r"AES\d+", re.IGNORECASE)
 
 def _mk(algorithm, usage, key_size, file_path, line_number, snippet, confidence,
         quantum, exposure="Internal", criticality="Med", source="config_scanner",
-        rule_id: str = "ECDAT-CFG-GEN-001") -> CryptoAsset:
+        rule_id: str = "QS-CFG-GEN-001") -> CryptoAsset:
     return CryptoAsset(
         asset_id=str(uuid.uuid4()),
         asset_type=AssetType.PROTOCOL,
@@ -94,7 +94,7 @@ def scan_config_file(filepath: str) -> List[CryptoAsset]:
                 "HIGH" if legacy else "MEDIUM",
                 QuantumStatus.LEGACY_BROKEN if legacy else QuantumStatus.SAFE,
                 criticality="High" if legacy else "Med",
-                rule_id="ECDAT-CFG-TLS-001" if not legacy else "ECDAT-CFG-TLS-LEGACY",
+                rule_id="QS-CFG-TLS-001" if not legacy else "QS-CFG-TLS-LEGACY",
             ))
 
     # --- Cipher suite detection ---
@@ -113,23 +113,23 @@ def scan_config_file(filepath: str) -> List[CryptoAsset]:
                         "HIGH" if weak else "MEDIUM",
                         QuantumStatus.LEGACY_BROKEN if weak else QuantumStatus.WEAKENED,
                         criticality="High" if weak else "Medium",
-                        rule_id=f"ECDAT-CFG-CIPHER-{algo}",
+                        rule_id=f"QS-CFG-CIPHER-{algo}",
                     ))
                     found_any = True
             if RSA_CIPHER.search(clean_line):
                 assets.append(_mk("RSA", UsageFunction.KEY_EXCHANGE, 2048, filepath, idx,
                                   clean_line, "MEDIUM", QuantumStatus.VULNERABLE, criticality="High",
-                                  rule_id="ECDAT-CFG-CIPHER-RSA"))
+                                  rule_id="QS-CFG-CIPHER-RSA"))
                 found_any = True
             if ECDSA_CIPHER.search(clean_line):
                 assets.append(_mk("ECDSA", UsageFunction.SIGNATURE, 256, filepath, idx,
                                   clean_line, "MEDIUM", QuantumStatus.VULNERABLE, criticality="High",
-                                  rule_id="ECDAT-CFG-CIPHER-ECDSA"))
+                                  rule_id="QS-CFG-CIPHER-ECDSA"))
                 found_any = True
             if AES_CIPHER.search(clean_line):
                 assets.append(_mk("AES", UsageFunction.ENCRYPTION, None, filepath, idx,
                                   clean_line, "LOW", QuantumStatus.WEAKENED,
-                                  rule_id="ECDAT-CFG-CIPHER-AES"))
+                                  rule_id="QS-CFG-CIPHER-AES"))
                 found_any = True
 
     # --- Certificate references ---
@@ -141,7 +141,7 @@ def scan_config_file(filepath: str) -> List[CryptoAsset]:
             assets.append(_mk("X.509", UsageFunction.SIGNATURE, None, filepath, idx,
                               clean_line, "MEDIUM", QuantumStatus.VULNERABLE,
                               criticality="High", source="config_scanner",
-                              rule_id="ECDAT-CFG-CERT-001"))
+                              rule_id="QS-CFG-CERT-001"))
 
     # --- DH parameters ---
     for idx, line in enumerate(lines, start=1):
@@ -154,6 +154,6 @@ def scan_config_file(filepath: str) -> List[CryptoAsset]:
             assets.append(_mk("DH", UsageFunction.KEY_EXCHANGE, ks, filepath, idx,
                               clean_line, "MEDIUM", QuantumStatus.VULNERABLE,
                               criticality="High", source="config_scanner",
-                              rule_id="ECDAT-CFG-DH-001"))
+                              rule_id="QS-CFG-DH-001"))
 
     return assets

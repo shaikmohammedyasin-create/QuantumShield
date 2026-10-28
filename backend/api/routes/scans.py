@@ -108,14 +108,14 @@ async def upload_scan(
     x_lifetime: float = Form(10.0),
     y_migration: float = Form(3.0),
 ):
-    """Accept a file (ZIP archive or single source file) and run the full ECDAT pipeline."""
+    """Accept a file (ZIP archive or single source file) and run the full QuantumShield pipeline."""
     filename = file.filename or "uploaded_file"
     # Sanitize filename
     safe_name = os.path.basename(filename.replace("\\", "/"))
     if not safe_name:
         raise HTTPException(status_code=400, detail="Invalid filename.")
 
-    tmp_dir = tempfile.mkdtemp(prefix="ecdat_upload_")
+    tmp_dir = tempfile.mkdtemp(prefix="qs_upload_")
     try:
         dest_path = os.path.join(tmp_dir, safe_name)
         contents = await file.read()
@@ -177,12 +177,12 @@ async def paste_scan(
     x_lifetime: float = Form(10.0),
     y_migration: float = Form(3.0),
 ):
-    """Accept pasted source code text and run the full ECDAT pipeline."""
+    """Accept pasted source code text and run the full QuantumShield pipeline."""
     safe_name = os.path.basename(filename.replace("\\", "/")) or "snippet.py"
     if len(code) > 10 * 1024 * 1024:  # 10 MB text cap
         raise HTTPException(status_code=413, detail="Pasted code exceeds 10 MB limit.")
 
-    tmp_dir = tempfile.mkdtemp(prefix="ecdat_paste_")
+    tmp_dir = tempfile.mkdtemp(prefix="qs_paste_")
     try:
         dest_path = os.path.join(tmp_dir, safe_name)
         with open(dest_path, "w", encoding="utf-8", errors="replace") as f:

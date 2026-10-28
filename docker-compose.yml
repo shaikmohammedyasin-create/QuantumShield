@@ -1,9 +1,9 @@
 services:
-  ecdat:
+  quantumshield:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: ecdat-workstation
+    container_name: quantumshield-workstation
     ports:
       - "8000:8000"
     environment:

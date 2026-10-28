@@ -1,6 +1,5 @@
 """
-ECDAT — Enterprise Cryptographic Discovery & Analysis Tool
-PS ID: 26164 | NTRO | SIH 2026
+QuantumShield — Cryptographic Risk Intelligence & Post-Quantum Readiness Platform
 
 Unified Launcher:
 Starts FastAPI Backend on http://localhost:8000
@@ -24,7 +23,7 @@ def run_frontend():
     return subprocess.Popen([npm_cmd, "run", "dev"], cwd="frontend")
 
 def main():
-    parser = argparse.ArgumentParser(description="ECDAT Unified Launcher")
+    parser = argparse.ArgumentParser(description="QuantumShield Unified Launcher")
     parser.add_argument("--backend-only", action="store_true", help="Launch FastAPI backend only")
     parser.add_argument("--frontend-only", action="store_true", help="Launch React frontend only")
     parser.add_argument("--port", type=int, default=8000, help="FastAPI port (default: 8000)")
@@ -34,8 +33,8 @@ def main():
 
     procs = []
     print("=" * 65)
-    print("  ECDAT Security Workstation — SIH 2026 // NTRO (PS ID: 26164)")
-    print("  Enterprise Cryptographic Discovery & Analysis Tool")
+    print("  QuantumShield Security Workstation")
+    print("  Cryptographic Risk Intelligence & Post-Quantum Readiness Platform")
     print("=" * 65)
 
     try:
@@ -50,7 +49,7 @@ def main():
             procs.append(p_front)
 
         time.sleep(2)
-        print("\n[✓] ECDAT System Operational:")
+        print("\n[✓] QuantumShield System Operational:")
         print(f"    • Backend API:      http://127.0.0.1:{args.port}")
         print(f"    • OpenAPI Docs:     http://127.0.0.1:{args.port}/docs")
         print("    • React Frontend:   http://localhost:5173")
@@ -66,7 +65,7 @@ def main():
             time.sleep(1)
 
     except KeyboardInterrupt:
-        print("\n[*] Shutting down ECDAT services...")
+        print("\n[*] Shutting down QuantumShield services...")
     finally:
         for p in procs:
             try:

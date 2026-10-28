@@ -48,20 +48,20 @@ KNOWN_CRYPTO_CLASSES = {
 }
 
 ALGO_INDICATORS = {
-    "RSA": (UsageFunction.ENCRYPTION, 2048, "ECDAT-BIN-RSA-001"),
-    "DSA": (UsageFunction.SIGNATURE, 1024, "ECDAT-BIN-DSA-001"),
-    "ECDSA": (UsageFunction.SIGNATURE, 256, "ECDAT-BIN-ECDSA-001"),
-    "ECDH": (UsageFunction.KEY_EXCHANGE, 256, "ECDAT-BIN-ECDH-001"),
-    "AES": (UsageFunction.ENCRYPTION, None, "ECDAT-BIN-AES-001"),
-    "DES": (UsageFunction.ENCRYPTION, 56, "ECDAT-BIN-DES-001"),
-    "DESEDE": (UsageFunction.ENCRYPTION, 112, "ECDAT-BIN-DES3-001"),
-    "3DES": (UsageFunction.ENCRYPTION, 112, "ECDAT-BIN-DES3-001"),
-    "MD5": (UsageFunction.HASH, None, "ECDAT-BIN-MD5-001"),
-    "SHA-1": (UsageFunction.HASH, None, "ECDAT-BIN-SHA1-001"),
-    "SHA1": (UsageFunction.HASH, None, "ECDAT-BIN-SHA1-001"),
-    "SHA-256": (UsageFunction.HASH, None, "ECDAT-BIN-SHA256-001"),
-    "SHA256": (UsageFunction.HASH, None, "ECDAT-BIN-SHA256-001"),
-    "SHA-512": (UsageFunction.HASH, None, "ECDAT-BIN-SHA512-001"),
+    "RSA": (UsageFunction.ENCRYPTION, 2048, "QS-BIN-RSA-001"),
+    "DSA": (UsageFunction.SIGNATURE, 1024, "QS-BIN-DSA-001"),
+    "ECDSA": (UsageFunction.SIGNATURE, 256, "QS-BIN-ECDSA-001"),
+    "ECDH": (UsageFunction.KEY_EXCHANGE, 256, "QS-BIN-ECDH-001"),
+    "AES": (UsageFunction.ENCRYPTION, None, "QS-BIN-AES-001"),
+    "DES": (UsageFunction.ENCRYPTION, 56, "QS-BIN-DES-001"),
+    "DESEDE": (UsageFunction.ENCRYPTION, 112, "QS-BIN-DES3-001"),
+    "3DES": (UsageFunction.ENCRYPTION, 112, "QS-BIN-DES3-001"),
+    "MD5": (UsageFunction.HASH, None, "QS-BIN-MD5-001"),
+    "SHA-1": (UsageFunction.HASH, None, "QS-BIN-SHA1-001"),
+    "SHA1": (UsageFunction.HASH, None, "QS-BIN-SHA1-001"),
+    "SHA-256": (UsageFunction.HASH, None, "QS-BIN-SHA256-001"),
+    "SHA256": (UsageFunction.HASH, None, "QS-BIN-SHA256-001"),
+    "SHA-512": (UsageFunction.HASH, None, "QS-BIN-SHA512-001"),
 }
 
 MAX_CLASS_SIZE = 10 * 1024 * 1024  # 10 MB per class file

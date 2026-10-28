@@ -89,7 +89,7 @@ def run_hashes(val: bytes):
         assert len(findings) == 2
         for f in findings:
             assert f.algorithm == "SHA-3"
-            assert f.rule_id == "ECDAT-SRC-SHA3-001"
+            assert f.rule_id == "QS-SRC-SHA3-001"
             assert f.library == "hashlib"
         line_numbers = {f.line_number for f in findings}
         assert 6 in line_numbers

@@ -1,44 +1,86 @@
-# Enterprise Cryptographic Discovery & Analysis Tool (ECDAT)
-**SIH 2026 | PS ID: 26164 | NTRO**  
-**Software Edition**  
+# QuantumShield
+
+**Cryptographic Risk Intelligence & Post-Quantum Readiness Platform**
+
+QuantumShield discovers cryptographic assets across source code, dependencies, certificates, configurations, and binaries; classifies post-quantum exposure; models migration risk with Mosca's inequality; and exports standards-based evidence (CycloneDX CBOM, SARIF, HTML/PDF/CSV reports) through an explainable-risk engine and a dedicated React security workstation.
+
+> **Product status:** QuantumShield is the productized evolution of a validated prototype (formerly ECDAT). The core scanning, classification, and CBOM pipeline has been verified against ground-truth corpora and external open-source targets; deployment URLs and test counts below are refreshed as part of this migration and marked TBD until post-migration verification completes.
+
+**Live demo:** `https://quantumshield.vercel.app/` *(placeholder — update with the deployed frontend URL)*
+**Backend API:** `https://quantumshield-backend.onrender.com` *(placeholder — update with the deployed backend URL)*
 
 ---
 
-ECDAT is an enterprise cryptographic discovery and analysis prototype for identifying cryptographic assets, classifying quantum exposure, evaluating migration timing, and producing CycloneDX CBOM evidence. The verified evaluation includes a controlled demo corpus, ground-truth measurements, and scans of OpenSSL, CPython, and OpenSSH.
+## Table of Contents
 
-**Live demo:** https://ecdat-sih-2026.vercel.app/  
-**Demo/video evidence:** https://drive.google.com/drive/folders/1Wmq3nGff2P4qEbl23E3n-kWzY5ClIipb
-
-### Quick Start
-1. Clone the repository.
-2. Create and activate a Python virtual environment.
-3. Install `requirements.txt`.
-4. Install frontend dependencies with `npm install` in `frontend/`.
-5. Run `python run.py`.
-
----
-
-## 🛡️ 1. What ECDAT Does
-
-ECDAT is a cybersecurity and Post-Quantum Cryptography (PQC) readiness prototype for discovering cryptographic assets, analyzing quantum risk, generating PQC guidance, and producing CycloneDX CBOM evidence. It enables defense and intelligence organizations to:
-
-1. **Discover Cryptographic Assets:** Scan supported source code, manifests, certificates, keystores, configuration files, and Java bytecode using the implemented offline scanners.
-2. **Standardize into a Cryptographic Bill of Materials (CBOM):** Generate CycloneDX 1.6 CBOM output and validate it against the project schema.
-3. **Classify Post-Quantum Vulnerability:** Classify findings into the project's quantum-status categories, including Vulnerable, Weakened, Legacy-broken, and Safe.
-4. **Evaluate Threat Surface (HNDL / TNFL):** Distinguish between Harvest-Now-Decrypt-Later (confidentiality) and Trust-Now-Forge-Later (authenticity/signatures).
-5. **Simulate Mosca's Inequality:** Interactively model $X + Y > Z$ (Data Lifetime + Migration Time vs CRQC Arrival Horizon).
-6. **Prioritize Explainable Risk:** Present explainable risk results using the project's configured risk model.
-7. **Deliver Actionable Migration Guidance:** Provide PQC migration recommendations based on the finding and configured guidance rules.
-8. **Export Multi-Format Deliverables:** Produce CBOM JSON, SARIF 2.1.0 (for GitHub / IDE code scanning), Executive HTML Reports, ReportLab A4 PDF reports, CSV inventories, and Markdown summaries.
-9. **Dedicated React Workstation:** Provide a React, TypeScript, Vite, and Tailwind-based interface for scan results and evidence.
+1. [What QuantumShield Does](#1-what-quantumshield-does)
+2. [Product Evolution: From Prototype to Platform](#2-product-evolution-from-prototype-to-platform)
+3. [Core Concepts](#3-core-concepts)
+4. [Architecture & Pipeline](#4-architecture--pipeline)
+5. [Security Workstation UI](#5-security-workstation-ui)
+6. [Supported Inputs & Scanners](#6-supported-inputs--scanners)
+7. [Quantum Classification & Threat Modeling](#7-quantum-classification--threat-modeling)
+8. [Mosca's Inequality Simulator](#8-moscas-inequality-simulator)
+9. [Explainable Risk Engine](#9-explainable-risk-engine)
+10. [PQC Migration Guidance](#10-pqc-migration-guidance)
+11. [CycloneDX CBOM](#11-cyclonedx-cbom)
+12. [Reports & Deliverables](#12-reports--deliverables)
+13. [Installation & Setup](#13-installation--setup)
+14. [Running QuantumShield](#14-running-quantumshield)
+15. [Configuration](#15-configuration)
+16. [Testing & Verification](#16-testing--verification)
+17. [Security Controls](#17-security-controls)
+18. [Known Limitations](#18-known-limitations)
+19. [Roadmap](#19-roadmap)
+20. [License](#20-license)
 
 ---
 
-## 🏛️ 2. Architecture & Pipeline
+## 1. What QuantumShield Does
+
+QuantumShield is a Cryptographic Risk Intelligence & Post-Quantum Readiness Platform for security teams that need to answer one question before CRQC (cryptographically relevant quantum computers) arrive: **where is our cryptography, how exposed is it, and what do we migrate first?**
+
+1. **Discover Cryptographic Assets:** Scan source code, dependency manifests, X.509 certificates, keystores, server configurations, and Java bytecode using offline scanners.
+2. **Standardize into a CBOM:** Generate CycloneDX 1.6 Cryptographic Bill of Materials output and validate it against the official schema.
+3. **Classify Post-Quantum Vulnerability:** Classify findings into quantum-status categories — Vulnerable (Shor), Weakened (Grover), Legacy-broken, and Safe.
+4. **Evaluate Threat Surface (HNDL / TNFL):** Distinguish Harvest-Now-Decrypt-Later (confidentiality) from Trust-Now-Forge-Later (authenticity/signature) exposure.
+5. **Simulate Mosca's Inequality:** Model X + Y > Z (data lifetime + migration time vs CRQC arrival horizon) interactively.
+6. **Prioritize with Explainable Risk:** Rank findings with a transparent, weighted 5-factor risk model — every score is traceable to its inputs.
+7. **Deliver Migration Guidance:** Deterministic PQC recommendations mapped to NIST FIPS 203/204/205 standards.
+8. **Export Multi-Format Deliverables:** CBOM JSON, SARIF 2.1.0, executive HTML reports, A4 PDF reports, CSV inventories, and Markdown summaries.
+9. **Dedicated React Workstation:** A React, TypeScript, Vite, and Tailwind interface for scanning, inspection, and evidence review.
+
+---
+
+## 2. Product Evolution: From Prototype to Platform
+
+QuantumShield began as a validated cryptographic discovery prototype built to a strict specification. That foundation is preserved and extended here:
+
+- **What was validated:** multi-scanner discovery (source, manifests, certificates, configs, bytecode), Shor/Grover classification, HNDL/TNFL tagging, Mosca lifetime modeling, deterministic PQC recommendations, and CycloneDX 1.6 CBOM generation with schema validation — verified against a ground-truth corpus and external targets (OpenSSL, CPython, OpenSSH).
+- **What changed:** the platform is rebranded and repackaged for product use — unified FastAPI + React deployment, CI/CD-ready SARIF output, containerized delivery, and cloud deployment guides. No fabrication of deployment history, customers, or credentials: track record is the codebase and its verification artifacts.
+- **What stays true:** 100% offline/air-gapped operation, zero private key persistence, and deterministic, explainable outputs.
+
+---
+
+## 3. Core Concepts
+
+| Concept | Meaning |
+|---|---|
+| **CBOM** | Cryptographic Bill of Materials — CycloneDX 1.6 inventory of cryptographic assets. |
+| **CRQC** | Cryptographically Relevant Quantum Computer — the adversary capability horizon. |
+| **HNDL** | Harvest-Now-Decrypt-Later — ciphertext captured today, decrypted once a CRQC exists. |
+| **TNFL** | Trust-Now-Forge-Later — signatures captured today, forged once a CRQC exists. |
+| **Shor-broken** | Public-key cryptography (RSA, ECC, DH) directly breakable by Shor's algorithm. |
+| **Grover-weakened** | Symmetric cryptography with reduced effective key strength under Grover's algorithm. |
+| **Mosca's Inequality** | If `X + Y > Z` (data lifetime + migration time exceeds CRQC horizon), you are already exposed. |
+
+---
+
+## 4. Architecture & Pipeline
 
 ```text
 ┌────────────────────────────────────────────────────────────────────────┐
-│               REACT + TYPESCRIPT + VITE STITCH WORKSTATION             │
+│               REACT + TYPESCRIPT + VITE WORKSTATION                    │
 │                       (Port 5173 / Localhost)                          │
 │                                                                        │
 │   • Dashboard             • Finding Inspector      • CBOM Inspector    │
@@ -46,7 +88,6 @@ ECDAT is a cybersecurity and Post-Quantum Cryptography (PQC) readiness prototype
 │   • Crypto Inventory      • Risk Analysis          • Settings / Policy │
 │   • Migration Guidance    • Reports & Evidence                         │
 └───────────────────────────────────┬────────────────────────────────────┘
-                                    │
                                     │ HTTP / REST APIs (JSON)
                                     ▼
 ┌────────────────────────────────────────────────────────────────────────┐
@@ -58,94 +99,151 @@ ECDAT is a cybersecurity and Post-Quantum Cryptography (PQC) readiness prototype
 │   GET  /api/inventory          GET  /api/findings  GET  /api/terminal  │
 │   GET  /api/mosca              POST /api/mosca     GET  /api/settings  │
 └───────────────────────────────────┬────────────────────────────────────┘
-                                    │
                                     ▼
 ┌────────────────────────────────────────────────────────────────────────┐
-│                 EXISTING PYTHON ECDAT ANALYSIS CORE                    │
+│                 QUANTUMSHIELD PYTHON ANALYSIS CORE                     │
 │                                                                        │
 │  PROJECT SOURCE ROOT / ARTIFACTS                                       │
-│        │                                                               │
 │        ├── Source Code (.py, .js, .java, .ts) ──► Python AST Visitor   │
 │        ├── Manifests (requirements, pom, etc.) ──► Multi-Ecosystem     │
 │        ├── Certificates (.pem, .der, .p12, .pub) ─► X.509 + Keystores  │
 │        ├── Server Configs (nginx, openssl, etc.) ─► TLS Protocols      │
 │        └── Java Bytecode (.class, .jar) ─────────► Offline Constant    │
-│                                 │                                      │
 │                                 ▼                                      │
-│                 RAW FORENSIC EVIDENCE & NORMALIZATION                  │
-│                 (File, Line, Rule ID, Snippet, Provenance)             │
-│                                 │                                      │
-│                                 ▼                                      │
-│                 CROSS-SCANNER DEDUPLICATION                            │
-│                 (Confidence upgrade & normalized usage)                │
-│                                 │                                      │
-│                                 ▼                                      │
-│                 POST-QUANTUM CLASSIFICATION & HNDL/TNFL                │
-│                 (Shor-Broken, Grover-Weakened, Legacy, Safe)           │
-│                                 │                                      │
-│                                 ▼                                      │
-│                 MOSCA LIFETIME MODEL (X + Y > Z)                       │
-│                                 │                                      │
-│                                 ▼                                      │
-│                 EXPLAINABLE RISK ENGINE (NTRO FORMULA)                 │
-│                                 │                                      │
-│                                 ▼                                      │
-│                 PQC RECOMMENDATIONS (NIST FIPS 203/204)                │
-│                                 │                                      │
-│                                 ▼                                      │
-│                 CYCLONEDX 1.6 CBOM SERIALIZATION & VALIDATION          │
-│                                 │                                      │
-│                                 ▼                                      │
-│     MULTI-FORMAT DELIVERABLES (CBOM, SARIF, HTML, PDF, CSV, Logs)      │
+│     RAW FORENSIC EVIDENCE & NORMALIZATION                              │
+│     → CROSS-SCANNER DEDUPLICATION                                      │
+│     → POST-QUANTUM CLASSIFICATION & HNDL/TNFL                          │
+│     → MOSCA LIFETIME MODEL (X + Y > Z)                                 │
+│     → EXPLAINABLE RISK ENGINE (weighted 5-factor formula)              │
+│     → PQC RECOMMENDATIONS (NIST FIPS 203/204/205)                      │
+│     → CYCLONEDX 1.6 CBOM SERIALIZATION & VALIDATION                    │
+│     → MULTI-FORMAT DELIVERABLES (CBOM, SARIF, HTML, PDF, CSV, Logs)    │
 └────────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## 🖥️ 3. All 11 Stitch Screens
+## 5. Security Workstation UI
 
-The user interface completely replaces Streamlit with 11 custom-crafted workstation screens matching Stitch design specifications (`Project ID: 15951502437945520827`):
+The React workstation provides 11 purpose-built screens:
 
-| # | Route | Screen Title | Key Capabilities |
+| # | Route | Screen | Key Capabilities |
 |---|---|---|---|
-| **1** | `/dashboard` | **Cryptographic Security Overview** | Hero KPI metrics, risk breakdown, quantum exposure distribution, recent findings list, quick scan CTA. |
-| **2** | `/scan/new` | **New Scan Configuration** | Target path selection, multi-scanner checklist (Python AST, Java, Manifests, Certs, Configs), real-time 8-stage execution pipeline. |
-| **3** | `/inventory` | **Crypto Inventory** | Searchable cryptographic asset table, multi-parameter filters (Algorithm, Quantum Status, Threat, Risk Band), pagination. |
-| **4** | `/findings/:id` | **Finding Inspector** | Dual-column workbench: Asset Parameters, Shor/Grover impact, Mosca theorem check, Quantitative risk card, and IDE code viewer with syntax highlighting and highlighted vulnerable lines. |
-| **5** | `/mosca` | **Mosca Simulator** | Interactive sliders for Data Lifetime ($X$), Migration Duration ($Y$), and CRQC Horizon ($Z$), presets (2030, 2035, 2040), real-time equation solving ($X + Y > Z$), HNDL verdict, and visual exposure timeline (2026–2040). |
-| **6** | `/risk` | **Cryptographic Risk Analysis** | Global threat exposure gauge, full RFC-NTRO-892 mathematical formula breakdown, 5 weighted factor cards, top risk-ranked findings table. |
-| **7** | `/migration` | **Post-Quantum Migration Guidance** | Bento metric cards, 3-stage architectural pipeline (Classical Vulnerable $\to$ Dual-Key Hybrid $\to$ Pure Post-Quantum Lattice), deterministic configured PQC transition rules. |
-| **8** | `/cbom` | **CycloneDX 1.6 CBOM** | Real-time CycloneDX 1.6 schema verification banner, discovered components tree, live syntax-highlighted raw CBOM JSON viewer, export actions. |
-| **9** | `/terminal` | **Terminal & Scan Log** | Live daemon telemetry stream, execution ID, log level filtering (ALL, INFO, SUCCESS, WARNING, CRITICAL), auto-scroll, regex filter, copy buffer, raw log export. |
-| **10** | `/settings` | **Settings & Security Policies** | 7 configuration domains: AST parsers, quantum classification defaults, risk weights, CBOM schema strictness, air-gapped security guardrails. |
-| **11** | `/reports` | **Reports & Evidence Deliverables** | 6 verified audit deliverables (Executive HTML, Technical Dossier, CSV Matrix, CBOM JSON, System Logs, Migration Plan), in-app live preview modal, verified download actions. |
+| 1 | `/dashboard` | Cryptographic Security Overview | KPI metrics, risk breakdown, quantum exposure distribution, recent findings, quick scan CTA. |
+| 2 | `/scan/new` | New Scan Configuration | Target path selection, multi-scanner checklist, real-time execution pipeline. |
+| 3 | `/inventory` | Crypto Inventory | Searchable asset table, filters (Algorithm, Quantum Status, Threat, Risk Band), pagination. |
+| 4 | `/findings/:id` | Finding Inspector | Asset parameters, Shor/Grover impact, Mosca check, quantitative risk card, code viewer with highlighted vulnerable lines. |
+| 5 | `/mosca` | Mosca Simulator | Interactive sliders for X (data lifetime), Y (migration time), Z (CRQC horizon), presets, HNDL verdict, exposure timeline. |
+| 6 | `/risk` | Cryptographic Risk Analysis | Threat exposure gauge, weighted-factor formula breakdown, risk-ranked findings table. |
+| 7 | `/migration` | Post-Quantum Migration Guidance | Migration pipeline (Classical → Hybrid → PQC), deterministic transition rules. |
+| 8 | `/cbom` | CycloneDX 1.6 CBOM | Schema verification banner, components tree, raw CBOM JSON viewer, export actions. |
+| 9 | `/terminal` | Terminal & Scan Log | Live scan telemetry, log-level filtering, regex filter, raw log export. |
+| 10 | `/settings` | Settings & Security Policies | Scanner configuration, classification defaults, risk weights, CBOM schema strictness, air-gap guardrails. |
+| 11 | `/reports` | Reports & Evidence Deliverables | All deliverable formats, in-app preview, verified downloads. |
 
 ---
 
-## ⚙️ 4. Installation & Setup
+## 6. Supported Inputs & Scanners
+
+| Category | Supported Formats | Scanner Implementation |
+|---|---|---|
+| **Python Source** | `.py` | AST call-site visitor (`hashlib`, `RSA.generate`, `AES.new`) + regex fallback |
+| **Java Source** | `.java` | Static pattern engine (`KeyPairGenerator`, `Cipher`, `Signature`, `MessageDigest`) |
+| **JavaScript / TypeScript** | `.js`, `.ts`, `.jsx`, `.tsx` | WebCrypto and Node.js `crypto` API indicators |
+| **Dependency Manifests** | `requirements.txt`, `pyproject.toml`, `pom.xml`, `package.json`, `package-lock.json`, `go.mod`, `Cargo.toml` | Offline manifest parsers with `defusedxml` protection |
+| **Digital Certificates** | `.pem`, `.crt`, `.cer`, `.der` | Full X.509 metadata extraction (algorithm, key size, subject, issuer, validity) |
+| **Keystores & Public Keys** | `.p12`, `.pfx`, `.pub` | PKCS#12 bundle parser & OpenSSH public key loader (zero private key storage) |
+| **Configuration Files** | `nginx.conf`, `sshd_config`, `openssl.cnf`, `.conf`, `.cfg` | TLS protocols, cipher suites, DH parameter groups |
+| **Java JVM Binaries** | `.class`, `.jar`, `.war` | Offline constant pool static analyzer with Zip Slip containment |
+
+---
+
+## 7. Quantum Classification & Threat Modeling
+
+Findings are classified into four quantum-status categories and tagged with a threat surface:
+
+| Status | Meaning | Example |
+|---|---|---|
+| **SHOR_BROKEN** | Directly broken by Shor's algorithm | RSA-2048 key exchange, ECDSA signatures |
+| **GROVER_WEAKENED** | Effective strength halved by Grover's algorithm | AES-128, SHA-256 (collision) |
+| **LEGACY_BROKEN** | Classically broken already | DES, 3DES, MD5, SHA-1 signatures |
+| **QUANTUM_SAFE** | No known quantum break | AES-256 (symmetric), hash-based signatures |
+
+Each finding is additionally tagged **HNDL** (harvest-now-decrypt-later: confidentiality at risk) or **TNFL** (trust-now-forge-later: authenticity at risk), which drives Mosca evaluation and migration priority.
+
+---
+
+## 8. Mosca's Inequality Simulator
+
+The platform models Mosca's theorem interactively:
+
+- **X** — how long your data must remain secret (data lifetime).
+- **Y** — how long migration of your systems will take.
+- **Z** — time until a CRQC exists (arrival horizon).
+
+If `X + Y > Z`, data encrypted today will be decryptable within its lifetime. The simulator supports interactive sliders, scenario presets, real-time equation solving, an HNDL verdict, and a visual exposure timeline, and can re-score an active inventory under new assumptions.
+
+---
+
+## 9. Explainable Risk Engine
+
+Risk scores use a transparent weighted 5-factor model (quantum exposure, data lifetime/sensitivity, business criticality, exploitability/legacy status, migration complexity). Every score in the UI is traceable to its contributing factors — no opaque ML scoring. Weights are configurable in Settings for organizational calibration.
+
+---
+
+## 10. PQC Migration Guidance
+
+Deterministic recommendations mapped to NIST post-quantum standards:
+
+| Finding Type | Recommended Replacement | Standard |
+|---|---|---|
+| Key exchange / encryption | Hybrid X25519 + ML-KEM-768, or ML-KEM envelope encryption | NIST FIPS 203 |
+| Digital signatures | ML-DSA-65 | NIST FIPS 204 |
+| Long-term signatures (high assurance) | SLH-DSA, LMS/XMSS | NIST FIPS 205, SP 800-208 |
+| Transitional state | Dual-key hybrid (classical + PQC) | Migration stage 2 of 3 |
+
+The migration pipeline follows three stages: Classical Vulnerable → Dual-Key Hybrid → Pure Post-Quantum Lattice.
+
+---
+
+## 11. CycloneDX CBOM
+
+Every scan produces a CycloneDX 1.6 CBOM validated against the official `bom-1.6.schema.json`. The CBOM includes component types, `cryptoProperties` (algorithm, key size, usage, quantum status), dynamic UUIDs and UTC timestamps. SARIF 2.1.0 output integrates with GitHub code scanning and IDE security tooling.
+
+---
+
+## 12. Reports & Deliverables
+
+Every scan produces six standard deliverables in `output/`:
+
+1. **`cbom.json`** — CycloneDX 1.6 Cryptographic BOM, validated against the official schema.
+2. **`inventory.csv`** — tabular asset inventory with rule IDs, locations, quantum status, risk bands.
+3. **`findings.sarif`** — schema-valid SARIF 2.1.0 for CI/CD code scanning.
+4. **`report.html`** — standalone executive security report.
+5. **`report.pdf`** — printable executive risk report (ReportLab).
+6. **`summary.md`** — markdown summary for release notes and ticket comments.
+
+---
+
+## 13. Installation & Setup
 
 ### Prerequisites
-- Python 3.10+ (Tested on Python 3.11, 3.12, and 3.14)
-- Node.js 18+ & npm
+- Python 3.10+ (tested on 3.11 and 3.12)
+- Node.js 18+ and npm
 - Git
 
-### Quick Setup (Local Environment)
+### Setup
 ```bash
-# Clone the repository
-git clone https://github.com/shaikmohammedyasin-create/ECDAT-SIH2026.git
-cd ECDAT-SIH2026
+git clone <your-repository-url>
+cd QuantumShield
 
-# Create and activate Python virtual environment
+# Backend
 python -m venv venv
-# On Windows PowerShell:
-.\venv\Scripts\Activate.ps1
-# On Linux/macOS:
-source venv/bin/activate
-
-# Install backend dependencies
+source venv/bin/activate          # Linux/macOS
+# .\venv\Scripts\Activate.ps1     # Windows PowerShell
 pip install -r requirements.txt
 
-# Install frontend dependencies
+# Frontend
 cd frontend
 npm install
 cd ..
@@ -153,111 +251,81 @@ cd ..
 
 ---
 
-## 🚀 5. Running ECDAT
+## 14. Running QuantumShield
 
-### Option A: Single-Command Unified Launcher (Recommended)
+### Option A: Unified launcher (recommended)
 ```bash
 python run.py
 ```
-This automatically starts:
-- **FastAPI Backend:** `http://127.0.0.1:8000` (Docs: `http://127.0.0.1:8000/docs`)
-- **React Frontend:** `http://localhost:5173`
-- Automatically opens your default web browser to the ECDAT Security Workstation!
+Starts the FastAPI backend on `http://127.0.0.1:8000` (API docs at `/docs`), the React frontend on `http://localhost:5173`, and opens your browser.
 
-### Option B: Independent Service Startup
-**Terminal 1 (Backend API):**
+### Option B: Separate services
 ```bash
+# Terminal 1 — backend
 python run.py --backend-only
-# Or directly via uvicorn:
-uvicorn backend.api.main:app --host 127.0.0.1 --port 8000 --reload
+# or: uvicorn backend.api.main:app --host 127.0.0.1 --port 8000 --reload
+
+# Terminal 2 — frontend
+cd frontend && npm run dev
 ```
 
-**Terminal 2 (React Frontend):**
-```bash
-cd frontend
-npm run dev
-```
+Cloud deployment options (Vercel + Render, unified Render/Railway, Docker, air-gapped local) are documented in [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md).
 
 ---
 
-## 📊 6. Supported Inputs & Manifests
+## 15. Configuration
 
-| Category | Supported Formats | Scanner Implementation |
+| Setting | Where | Purpose |
 |---|---|---|
-| **Python Source** | `.py` | AST Call-Site Visitor (`hashlib`, `RSA.generate`, `AES.new`) + Regex Fallback |
-| **Java Source** | `.java` | Static Pattern Engine (`KeyPairGenerator`, `Cipher`, `Signature`, `MessageDigest`) |
-| **JavaScript / TypeScript** | `.js`, `.ts`, `.jsx`, `.tsx` | WebCrypto and Node.js `crypto` API indicators (`createCipheriv`, `createHash`) |
-| **Dependency Manifests** | `requirements.txt`, `pyproject.toml`, `pom.xml`, `package.json`, `package-lock.json`, `go.mod`, `Cargo.toml` | Offline manifest parsers with `defusedxml` protection |
-| **Digital Certificates** | `.pem`, `.crt`, `.cer`, `.der` | Full X.509 metadata extraction (Algorithm, Key Size, Subject, Issuer, Validity) |
-| **Keystores & Public Keys**| `.p12`, `.pfx`, `.pub` | PKCS#12 bundle parser & OpenSSH public key loader (**Zero private key storage**) |
-| **Configuration Files** | `nginx.conf`, `sshd_config`, `openssl.cnf`, `.conf`, `.cfg` | TLS protocols, SSL cipher suites, DH parameter groups |
-| **Java JVM Binaries** | `.class`, `.jar`, `.war` | Offline constant pool (`0xCAFEBABE`) static analyzer with Zip Slip containment |
+| `VITE_API_BASE_URL` | frontend env | Backend API base URL for split deployments |
+| `ALLOWED_ORIGINS` | backend env | CORS allowlist (see `render.yaml`) |
+| `PORT` / `HOST` | environment | Server bind address in containers |
+| Risk weights & classification defaults | Workstation Settings | Calibrate the risk model and scanner behavior |
+| CBOM schema strictness | Workstation Settings | Validation strictness for CycloneDX output |
 
 ---
 
-## 📑 7. Reports & Deliverables
+## 16. Testing & Verification
 
-Every scan produces 6 standard deliverables in `output/`:
+Run the automated test suite:
 
-1. **`cbom.json`**: CycloneDX 1.6 Cryptographic BOM strictly validated against `schemas/bom-1.6.schema.json`.
-2. **`inventory.csv`**: Tabular asset inventory with rule IDs, locations, quantum status, and risk bands.
-3. **`findings.sarif`**: Schema-valid SARIF 2.1.0 output for automated CI/CD code scanning.
-4. **`report.html`**: Standalone, dark-palette executive security report with interactive metrics.
-5. **`report.pdf`**: Printable executive risk report built via ReportLab.
-6. **`summary.md`**: Executive markdown summary suitable for commit comments and release notes.
+```bash
+python -m pytest tests/ -v
+```
 
----
-
-## 🧪 8. Automated Testing & Verification
-
-Run the full automated test suite:
-
-    .\\venv\\Scripts\\python.exe -m pytest tests/ -v
-
-### Verified Results
-- **68 tests total:** 48 core, 15 API, and 5 hardening tests.
-- **Ground-truth evaluation:** 37 true positives, 0 false positives, 1 false negative, and 15 true negatives; precision **1.0000**, recall **0.9737**, F1 **0.9867**.
-- **Demo scan (`test_corpus`):** 25 assets (11 Shor-vulnerable, 5 Grover-weakened, 6 legacy-broken, 3 Quantum-safe), 16 Mosca violations, with 14 Critical, 8 High, and 3 Medium findings.
-- **CycloneDX 1.6 CBOM:** 25 components and 0 schema errors on the verified demo scan.
-- **External scans:** OpenSSL 3.3.0 (5,295 files, 1,295 findings), CPython 3.12.3 (4,636 files, 45 findings), and OpenSSH 9.7p1 (849 files, 205 findings); all recorded 0 CBOM schema errors.
+**Test count: TBD — verified post-migration.** The prototype's evaluation included a controlled ground-truth corpus and scans of OpenSSL, CPython, and OpenSSH; the test suite count for this productized build will be published here once the post-migration rerun is confirmed.
 
 ---
 
-## 🔒 9. Security Controls & Air-Gap Guarantee
+## 17. Security Controls
 
-- **Air-Gapped Operation:** Zero external network calls, tracking beacons, or telemetry.
-- **Zero Private Key Persistence:** Scanners inspect algorithms and parameters only; never persist or log private keys.
-- **Path Traversal Protection:** Target scan paths are sandboxed and validated against directory escape attacks.
-- **Zip Slip & Archive Bomb Guard:** JAR and archive readers cap entry extraction and enforce safe path canonicalization.
-- **XML Entity Defense:** Uses `defusedxml` to block XML external entity (XXE) and billion-laughs attacks.
+- **Air-gapped operation:** zero external network calls, tracking beacons, or telemetry. All scanners run offline.
+- **Zero private key persistence:** scanners inspect algorithms and parameters only; private keys are never stored or logged.
+- **Path traversal protection:** target scan paths are validated against directory escape.
+- **Zip Slip & archive bomb guards:** archive readers cap extraction and enforce safe path canonicalization.
+- **XML entity defense:** `defusedxml` blocks XXE and entity-expansion attacks in manifest parsing.
 
 ---
 
-## 🎬 10. Reproducible Demonstration Workflow
+## 18. Known Limitations
 
-For a reproducible evaluator walkthrough:
-1. Run `python run.py` and open the React workstation.
-2. Scan `test_corpus` and review the dashboard and inventory.
-3. Open a finding in **Finding Inspector** to inspect source evidence and quantum classification.
-4. Review the **Mosca Simulator**, **Risk Analysis**, **Migration Guidance**, and **CycloneDX 1.6 CBOM** views.
-5. Inspect the generated evidence and reports.
+- Full AST analysis is implemented for Python source; other source-language scanners use static pattern approaches.
+- TLS and server-configuration analysis is the weakest scanner area and should be treated accordingly.
+- Binary disassembly of compiled ELF/PE/Mach-O binaries is roadmap functionality (Java bytecode is supported).
+- No live network probing of TLS/SSH endpoints — this is a static, air-gapped scanner by design.
+- Password-protected JKS keystores are not parsed.
 
-### Verified Demo Evidence
+---
 
-The verified `test_corpus` demonstration contains **25 assets** (**11 Shor-vulnerable**, **5 Grover-weakened**, **6 legacy-broken**, **3 Quantum-safe**), **16 Mosca violations**, **14 Critical**, **8 High**, and **3 Medium** findings. The resulting CycloneDX 1.6 CBOM contains **25 components** with **0 schema errors**.
+## 19. Roadmap
 
-![ECDAT Dashboard](tests/results/e2e_01_dashboard.png)
+- Deeper data-flow analysis for multi-language source scanners.
+- Compiled-binary symbol recovery (ELF/PE/Mach-O).
+- CI/CD integration presets (GitHub Actions, GitLab) for SARIF uploads.
+- Continuous CBOM drift monitoring across repositories and releases.
 
-**Live demo:** https://ecdat-sih-2026.vercel.app/
+---
 
-**Demo/video evidence:** https://drive.google.com/drive/folders/1Wmq3nGff2P4qEbl23E3n-kWzY5ClIipb
+## 20. License
 
-## Known Limitations
-
-- True AST analysis is currently implemented for Python source; other source-language scanners use their implemented static pattern/parsing approaches.
-- TLS and configuration analysis is the weakest scanner area and should be treated accordingly.
-- Non-quantum risk factors use project defaults unless the user supplies different values.
-
-## License
-
-ECDAT is licensed under the [MIT License](LICENSE).
+QuantumShield is licensed under the [MIT License](LICENSE).

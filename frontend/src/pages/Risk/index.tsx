@@ -45,11 +45,11 @@ export const RiskAnalysis: React.FC = () => {
               Cryptographic Risk Analysis
             </h1>
             <span className="px-2 py-0.5 rounded text-code-sm font-code-sm bg-surface-container-highest border border-outline-variant text-primary font-mono">
-              RFC-NTRO-892 Engine
+              QS Risk Engine
             </span>
           </div>
           <p className="text-body-sm font-body-sm text-on-surface-variant mt-0.5 text-xs">
-            Quantitative risk scoring and threat surface exposure engine according to ECDAT deterministic formula.
+            Quantitative risk scoring and threat surface exposure engine according to QuantumShield deterministic formula.
           </p>
         </div>
         <div className="flex items-center gap-2 flex-wrap">
@@ -140,10 +140,10 @@ export const RiskAnalysis: React.FC = () => {
             <div className="flex items-center gap-2">
               <span className="material-symbols-outlined text-primary text-[18px]">functions</span>
               <span className="text-label-caps font-label-caps text-on-surface uppercase text-xs font-semibold">
-                ECDAT Deterministic Risk Formulation
+                QuantumShield Deterministic Risk Formulation
               </span>
             </div>
-            <span className="font-code-sm text-[11px] text-outline">Deterministic Engine Spec: NTRO-26164</span>
+            <span className="font-code-sm text-[11px] text-outline">Deterministic Engine Spec: QuantumShield</span>
           </div>
 
           {/* Equation Display */}

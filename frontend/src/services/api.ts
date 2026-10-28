@@ -33,7 +33,7 @@ export const API_BASE: string = (() => {
     // If served from Vercel (proxied by vercel.json) or same origin
     return "/api";
   }
-  return "https://ecdat-sih2026.onrender.com/api";
+  return "/api";
 })();
 
 export async function fetchDashboard(): Promise<DashboardData> {

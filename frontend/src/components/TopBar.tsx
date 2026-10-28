@@ -37,8 +37,8 @@ export const TopBar: React.FC<TopBarProps> = ({
 
         <Link to="/scan/new" className="flex items-center gap-1.5 text-primary font-mono text-xs font-bold tracking-tight hover:opacity-90">
           <span className="material-symbols-outlined text-primary-container text-sm">shield</span>
-          <span className="hidden sm:inline">ECDAT // PS-ID: 26164 (NTRO)</span>
-          <span className="sm:hidden">ECDAT</span>
+          <span className="hidden sm:inline">QuantumShield // Risk Intelligence & PQC Platform</span>
+          <span className="sm:hidden">QuantumShield</span>
         </Link>
         <div className="hidden sm:block h-4 w-px bg-outline-variant"></div>
         <nav className="hidden md:flex items-center h-10 text-xs font-mono">
