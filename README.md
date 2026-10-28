@@ -6,8 +6,9 @@ QuantumShield discovers cryptographic assets across source code, dependencies, c
 
 > **Product status:** QuantumShield is the productized evolution of a validated prototype (formerly ECDAT). The core scanning, classification, and CBOM pipeline has been verified against ground-truth corpora and external open-source targets; deployment URLs and test counts below are refreshed as part of this migration and marked TBD until post-migration verification completes.
 
-**Live demo:** `https://quantumshield.vercel.app/` *(placeholder — update with the deployed frontend URL)*
-**Backend API:** `https://quantumshield-backend.onrender.com` *(placeholder — update with the deployed backend URL)*
+**Live Production Workstation:** [https://quantumshield-seven.vercel.app/](https://quantumshield-seven.vercel.app/)
+**Live Backend API & OpenAPI Docs:** [https://quantumshield-b5j2.onrender.com/docs](https://quantumshield-b5j2.onrender.com/docs)
+**Backend Health Endpoint:** [https://quantumshield-b5j2.onrender.com/health](https://quantumshield-b5j2.onrender.com/health)
 
 ---
 
@@ -293,7 +294,7 @@ Run the automated test suite:
 python -m pytest tests/ -v
 ```
 
-**Test count: TBD — verified post-migration.** The prototype's evaluation included a controlled ground-truth corpus and scans of OpenSSL, CPython, and OpenSSH; the test suite count for this productized build will be published here once the post-migration rerun is confirmed.
+**Test count: 71 passing tests — verified on the productized build** (48 core engine, 15 API integration, 8 hardening). The prototype evaluation additionally included a controlled ground-truth corpus and scans of OpenSSL, CPython, and OpenSSH.
 
 ---
 

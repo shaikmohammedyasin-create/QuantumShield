@@ -77,21 +77,6 @@ def _validate_scan_path(path: str) -> str:
         raise HTTPException(status_code=400, detail="Scanning system root directories is prohibited for safety.")
     return norm
 
-    if ".." in path:
-        raise HTTPException(status_code=400, detail="Path traversal tokens ('..') are prohibited.")
-    if os.name != "nt" and len(path) >= 2 and path[1] == ":" and path[0].isalpha():
-        raise HTTPException(
-            status_code=400,
-            detail=f"Windows host path '{path}' cannot be accessed directly inside this Linux/Docker container. Please click 'Browse & Select Folder' in the UI to choose the folder directly from your PC."
-        )
-    norm = os.path.abspath(os.path.normpath(path))
-    if not os.path.exists(norm):
-        raise HTTPException(status_code=404, detail=f"Target path does not exist on disk: {norm}")
-    drive, rest = os.path.splitdrive(norm)
-    rest_lower = rest.lower().replace("/", "\\")
-    if rest_lower in ("\\", "") or rest_lower.startswith(("\\windows", "\\system32", "\\program files", "\\program files (x86)", "\\etc", "\\root", "\\sys", "\\proc")):
-        raise HTTPException(status_code=400, detail="Scanning system root directories is prohibited for safety.")
-    return norm
 
 
 @router.post("", response_model=ScanStatusResponse)

@@ -101,6 +101,20 @@ def test_migration_guidance_endpoint():
     assert len(data["matrix"]) > 0
     assert "standards" in data
 
+    # Test updating migration status
+    patch_resp = client.patch("/api/migration/status", json={"key": "test_item", "status": "In Progress"})
+    assert patch_resp.status_code == 200
+    assert patch_resp.json()["status"] == "In Progress"
+
+    # Test invalid status returns 400
+    bad_resp = client.patch("/api/migration/status", json={"key": "test_item", "status": "InvalidStatus"})
+    assert bad_resp.status_code == 400
+
+    from backend.api.routes.migration import _load_tracking_status, _save_tracking_status
+    status_map = _load_tracking_status()
+    status_map.pop("test_item", None)
+    _save_tracking_status(status_map)
+
 
 def test_cbom_endpoint():
     resp = client.get("/api/cbom")

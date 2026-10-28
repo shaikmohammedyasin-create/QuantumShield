@@ -1,5 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
-  <path d="M64 12 L24 32 V64 C24 84 64 112 64 112 C64 112 104 84 104 64 V32 L64 12 Z" fill="#312e81" />
-  <path d="M64 24 L40 38 V60 C40 76 64 92 64 92 C64 92 88 76 88 60 V38 L64 24 Z" fill="#4f46e5" />
-  <path d="M58 50 L62 50 L62 70 L58 70 Z M66 50 L70 50 L70 70 L66 70 Z" fill="#c7d2fe" />
+  <!-- Outer Shield - Dark Surface with Amber Primary Border -->
+  <path d="M64 8 L18 28 V64 C18 90 64 120 64 120 C64 120 110 90 110 64 V28 L64 8 Z" fill="#1b2027" stroke="#ffc174" stroke-width="4" stroke-linejoin="round" />
+  <!-- Inner Shield Glow -->
+  <path d="M64 20 L30 36 V62 C30 82 64 106 64 106 C64 106 98 82 98 62 V36 L64 20 Z" fill="#0f141b" stroke="#f59e0b" stroke-width="2" />
+  <!-- Quantum Keyhole / Atom Core Emblem in Amber Primary -->
+  <circle cx="64" cy="54" r="10" fill="#ffc174" />
+  <path d="M58 58 L52 82 H76 L70 58 Z" fill="#f59e0b" />
+  <circle cx="64" cy="54" r="4" fill="#0f141b" />
+  <!-- Quantum Orbit Ring -->
+  <ellipse cx="64" cy="62" rx="22" ry="7" fill="none" stroke="#ffc174" stroke-width="1.5" stroke-dasharray="2 3" opacity="0.8" />
 </svg>

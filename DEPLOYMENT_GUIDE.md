@@ -4,6 +4,15 @@
 
 ---
 
+## 🌐 Live Production Deployments
+
+- **Frontend Security Workstation (Vercel)**: [https://quantumshield-seven.vercel.app](https://quantumshield-seven.vercel.app)
+- **Backend API Layer (Render)**: [https://quantumshield-b5j2.onrender.com](https://quantumshield-b5j2.onrender.com)
+- **Health Verification Endpoint**: [https://quantumshield-b5j2.onrender.com/health](https://quantumshield-b5j2.onrender.com/health)
+- **Interactive OpenAPI / Swagger Documentation**: [https://quantumshield-b5j2.onrender.com/docs](https://quantumshield-b5j2.onrender.com/docs)
+
+---
+
 ## 🚀 Choose Your Deployment Strategy
 
 | Method | Where It Runs | Best For | Time to Deploy |
