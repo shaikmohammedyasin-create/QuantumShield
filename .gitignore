@@ -50,6 +50,8 @@ scratch/
 # Presentations
 *.ppt
 *.pptx
+*.tmp
+.~lock.*#
 
 # Environment variables and secrets
 .env

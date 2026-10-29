@@ -1,0 +1,52 @@
+flowchart TD
+  User[Security Engineer]
+  UI[QuantumShield Web UI\nReact + TypeScript + Vite + Tailwind]
+  API[Scan Orchestration API\nFastAPI on Render]
+  Input[Repository / Input Layer\nSource, manifests, certs, configs, bytecode]
+  Discover[Discovery & File Enumeration\nSafe traversal, type classification, archive guards]
+  Scanners[Language & Artifact Scanners\nPython AST, Java/JS/C static, manifests, X.509, configs, JVM bytecode]
+  Normalize[Evidence Normalization\nProvenance, rule IDs, line ranges, confidence]
+  Dedup[Cross-Scanner Deduplication\nNormPath, Line, Algorithm, Usage]
+  Classify[Cryptographic Classification\nShor-broken, Grover-weakened, legacy-broken, quantum-safe]
+  Threat[Threat Surface Tagging\nHNDL confidentiality, TNFL authenticity]
+  Mosca[Mosca Engine\nX + Y > Z exposure timeline]
+  Risk[Risk Intelligence Engine\n0.35 Q + 0.25 B + 0.15 E + 0.15 S + 0.10 (1-A)]
+  Recommend[Migration Recommendation Engine\nFIPS 203 / 204 / 205 / SP 800-208]
+  Track[Migration Tracking\nClassical -> Hybrid -> PQC]
+  CBOM[CBOM Generator\nCycloneDX 1.6 schema-validated]
+  Reports[Report Generator\nSARIF, CSV, HTML, PDF, Markdown]
+  Outputs[Deliverables\ncbom.json, inventory.csv, findings.sarif, report.html, report.pdf, summary.md]
+
+  Terminal[Temporary Scan Workspace\nQuarantined extracted content, deleted after run]
+  Security[Security Boundaries\nPath traversal protection, Zip Slip guards,\narchive bomb guards, defusedxml, no shell=True]
+  Secrets[No Private-Key Persistence\nMetadata only, never secret material]
+
+  User --> UI
+  UI --> API
+  API --> Input
+  Input --> Discover
+  Discover --> Scanners
+  Scanners --> Normalize
+  Normalize --> Dedup
+  Dedup --> Classify
+  Classify --> Threat
+  Threat --> Mosca
+  Mosca --> Risk
+  Risk --> Recommend
+  Recommend --> Track
+  Track --> CBOM
+  CBOM --> Reports
+  Reports --> Outputs
+
+  Discover -. uses .-> Terminal
+  Scanners -. protected by .-> Security
+  Scanners -. respects .-> Secrets
+  UI -. verified against .-> API
+
+  Cloud[Vercel Frontend CDN]
+  Backend[Render FastAPI Backend]
+  Local[Local launcher: python run.py]
+
+  UI -. deployed on .-> Cloud
+  API -. deployed on .-> Backend
+  API -. also runs .-> Local
