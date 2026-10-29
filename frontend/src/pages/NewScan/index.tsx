@@ -631,22 +631,6 @@ export const NewScanPage: React.FC = () => {
                 >
                   controlled test_corpus
                 </button>
-                <button
-                  type="button"
-                  id="preset-sih-btn"
-                  onClick={() => {
-                    setPathVal("sih");
-                    setSelectedFolderFiles(null);
-                    setSelectedFolderName(null);
-                  }}
-                  className={`px-2 py-0.5 rounded text-[10px] font-mono border transition-colors ${
-                    pathVal === "sih" && !selectedFolderFiles
-                      ? "bg-primary/20 text-primary border-primary font-bold"
-                      : "bg-surface-container border-outline-variant text-on-surface-variant hover:text-on-surface"
-                  }`}
-                >
-                  SIH26164 (Local Scan Root)
-                </button>
               </div>
             </div>
           </div>

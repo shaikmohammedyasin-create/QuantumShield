@@ -33,9 +33,9 @@ from app.pipeline import PRUNE_DIRS
 
 
 # Safety constraints
-MAX_ARCHIVE_BYTES = 50 * 1024 * 1024      # 50 MB compressed cap
-MAX_EXTRACTED_BYTES = 250 * 1024 * 1024   # 250 MB uncompressed cap
-MAX_FILE_COUNT = 5000                     # Max files extracted
+MAX_ARCHIVE_BYTES = 200 * 1024 * 1024      # 200 MB compressed cap
+MAX_EXTRACTED_BYTES = 1024 * 1024 * 1024   # 1 GB uncompressed cap
+MAX_FILE_COUNT = 20000                     # Max files extracted
 DOWNLOAD_TIMEOUT = 45                     # Max seconds to wait for download
 PINNED_TARGETS_DIR = os.path.abspath("tests/external_targets")
 
